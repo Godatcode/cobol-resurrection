@@ -155,22 +155,22 @@
   - Test terminal log rendering
   - _Requirements: 3.3, 3.4, 3.5_
 
-- [-] 9. Implement MCP tool functionality
+- [x] 9. Implement MCP tool functionality
   - Verify .kiro/mcp/server.json configuration is correct
   - Test run_legacy_calc tool manually with sample parameters
   - Verify tool executes COBOL binary and returns parsed result
   - Verify tool handles errors appropriately
   - _Requirements: 5.2, 5.3, 5.4_
 
-- [ ] 9.1 Write property test for MCP tool execution
+- [x] 9.1 Write property test for MCP tool execution
   - **Property 11: MCP Tool Execution**
   - **Validates: Requirements 5.2, 5.3**
 
-- [ ] 9.2 Write property test for MCP tool error handling
+- [x] 9.2 Write property test for MCP tool error handling
   - **Property 12: MCP Tool Error Handling**
   - **Validates: Requirements 5.4**
 
-- [ ] 10. Final integration and testing checkpoint
+- [x] 10. Final integration and testing checkpoint
   - Ensure all tests pass, ask the user if questions arise
   - Verify COBOL compiles successfully
   - Verify Bridge Server starts and responds to requests
@@ -181,7 +181,7 @@
   - Verify steering persona is applied
   - _Requirements: All_
 
-- [ ] 11. Create README documentation
+- [x] 11. Create README documentation
   - Document prerequisites (GnuCOBOL, Node.js)
   - Document setup steps (compilation, installation, running)
   - Document project structure
