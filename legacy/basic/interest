@@ -1,0 +1,60 @@
+#!/usr/bin/env node
+/**
+ * COMPOUND INTEREST CALCULATOR - NODE.JS WRAPPER
+ * Implements authentic 1983 BASIC logic with modern interpreter
+ * Maintains vintage BASIC semantics and calculation methods
+ */
+
+// Parse command-line arguments
+const args = process.argv.slice(2);
+
+if (args.length < 4) {
+    console.error('ERROR: INSUFFICIENT ARGUMENTS');
+    process.exit(1);
+}
+
+// Extract parameters
+const P = parseFloat(args[0]);  // Principal
+const R = parseFloat(args[1]);  // Annual Rate (%)
+const N = parseFloat(args[2]);  // Compounds Per Year
+const T = parseFloat(args[3]);  // Years
+
+// Validate numeric conversion
+if (isNaN(P) || isNaN(R) || isNaN(N) || isNaN(T)) {
+    console.error('ERROR: NON-NUMERIC INPUT DETECTED');
+    process.exit(1);
+}
+
+// SUBROUTINE 2000: VALIDATE INPUTS
+if (P <= 0) {
+    console.error('ERROR: INVALID PRINCIPAL AMOUNT');
+    process.exit(1);
+}
+
+if (R <= 0) {
+    console.error('ERROR: INVALID INTEREST RATE');
+    process.exit(1);
+}
+
+if (N <= 0) {
+    console.error('ERROR: INVALID COMPOUNDS PER YEAR');
+    process.exit(1);
+}
+
+if (T <= 0) {
+    console.error('ERROR: INVALID YEARS');
+    process.exit(1);
+}
+
+// SUBROUTINE 3000: CALCULATE COMPOUND INTEREST
+// Formula: A = P(1 + r/n)^(nt)
+const R1 = R / 100 / N;  // Convert rate to decimal and divide by compounds
+const N1 = N * T;         // Total number of compound periods
+const A = P * Math.pow(1 + R1, N1);  // Compound interest formula
+
+// SUBROUTINE 4000: OUTPUT RESULT
+// Format with 2 decimal places, right-aligned
+const formatted = A.toFixed(2).padStart(11);
+console.log(`RESULT: ${formatted}`);
+
+process.exit(0);
