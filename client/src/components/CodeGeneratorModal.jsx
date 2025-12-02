@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import PunchCard from './PunchCard';
 
 /**
  * SUMMON ANCIENT SPIRIT MODAL
@@ -260,6 +261,26 @@ END.`;
               <div className="text-mainframe-green font-mono text-sm mb-2">
                 GENERATED {language} CODE:
               </div>
+              
+              {/* PUNCH CARD VISUALIZATION FOR COBOL */}
+              {language === 'COBOL' && (
+                <div className="mb-4">
+                  <div className="text-mainframe-green font-mono text-xs mb-2 text-center">
+                    📇 PUNCH CARD REPRESENTATION
+                  </div>
+                  <div className="max-h-96 overflow-y-auto">
+                    {generatedCode.split('\n').slice(0, 10).map((line, idx) => (
+                      <div key={idx} className="mb-2">
+                        <PunchCard text={line} maxColumns={80} />
+                      </div>
+                    ))}
+                  </div>
+                  <div className="text-mainframe-green font-mono text-xs text-center mt-2">
+                    (Showing first 10 lines as punch cards)
+                  </div>
+                </div>
+              )}
+              
               <div className="bg-black border-2 border-mainframe-green p-4 overflow-x-auto">
                 <pre className="text-mainframe-green font-mono text-sm whitespace-pre">
                   {generatedCode}

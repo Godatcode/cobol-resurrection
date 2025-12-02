@@ -106,4 +106,75 @@ describe('UI Component Unit Tests', () => {
       expect(formSource).toContain('term:');
     });
   });
+
+  describe('Tape Reel Component', () => {
+    it('should render tape reel component with SVG elements', () => {
+      const tapeReelSource = readFileSync('client/src/components/TapeReel.tsx', 'utf-8');
+      
+      // Check for SVG rendering
+      expect(tapeReelSource).toContain('<svg');
+      expect(tapeReelSource).toContain('viewBox');
+      expect(tapeReelSource).toContain('circle');
+    });
+
+    it('should accept isCalculating prop', () => {
+      const tapeReelSource = readFileSync('client/src/components/TapeReel.tsx', 'utf-8');
+      
+      // Check for isCalculating prop
+      expect(tapeReelSource).toContain('isCalculating');
+      expect(tapeReelSource).toContain('boolean');
+    });
+
+    it('should implement rotation animation', () => {
+      const tapeReelSource = readFileSync('client/src/components/TapeReel.tsx', 'utf-8');
+      
+      // Check for rotation state and animation
+      expect(tapeReelSource).toContain('rotation');
+      expect(tapeReelSource).toContain('setRotation');
+      expect(tapeReelSource).toContain('transform');
+    });
+
+    it('should implement velocity-based physics', () => {
+      const tapeReelSource = readFileSync('client/src/components/TapeReel.tsx', 'utf-8');
+      
+      // Check for velocity state and physics constants
+      expect(tapeReelSource).toContain('velocity');
+      expect(tapeReelSource).toContain('ACCELERATION');
+      expect(tapeReelSource).toContain('DECELERATION');
+      expect(tapeReelSource).toContain('MAX_VELOCITY');
+    });
+
+    it('should sync rotation speed with calculation status', () => {
+      const tapeReelSource = readFileSync('client/src/components/TapeReel.tsx', 'utf-8');
+      
+      // Check for conditional velocity logic based on isCalculating
+      expect(tapeReelSource).toContain('if (isCalculating)');
+      expect(tapeReelSource).toContain('MAX_VELOCITY');
+      expect(tapeReelSource).toContain('IDLE_VELOCITY');
+    });
+
+    it('should display reel labels (REEL A and REEL B)', () => {
+      const tapeReelSource = readFileSync('client/src/components/TapeReel.tsx', 'utf-8');
+      
+      // Check for authentic IBM 729 labeling
+      expect(tapeReelSource).toContain('REEL A');
+      expect(tapeReelSource).toContain('REEL B');
+    });
+
+    it('should use requestAnimationFrame for smooth animation', () => {
+      const tapeReelSource = readFileSync('client/src/components/TapeReel.tsx', 'utf-8');
+      
+      // Check for animation frame usage
+      expect(tapeReelSource).toContain('requestAnimationFrame');
+      expect(tapeReelSource).toContain('cancelAnimationFrame');
+    });
+
+    it('should display RPM indicator', () => {
+      const tapeReelSource = readFileSync('client/src/components/TapeReel.tsx', 'utf-8');
+      
+      // Check for RPM display
+      expect(tapeReelSource).toContain('RPM');
+      expect(tapeReelSource).toContain('velocity');
+    });
+  });
 });

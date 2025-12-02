@@ -3,6 +3,8 @@ import Header from './components/Header'
 import MortgageForm from './components/MortgageForm'
 import TerminalWindow from './components/TerminalWindow'
 import CodeGeneratorModal from './components/CodeGeneratorModal'
+import TapeReel from './components/TapeReel'
+import PanelLights from './components/PanelLights'
 import './App.css'
 
 // Boot sequence configuration as per design document
@@ -84,6 +86,15 @@ function App() {
         onCalculationComplete={handleCalculationComplete}
         onCalculationError={handleCalculationError}
       />
+      
+      {/* IBM 729 TAPE DRIVE VISUALIZATION */}
+      <TapeReel isCalculating={isCalculating} />
+      
+      {/* IBM 7090 CONSOLE PANEL LIGHTS */}
+      <div className="max-w-4xl mx-auto px-6 py-6">
+        <PanelLights isCalculating={isCalculating} />
+      </div>
+      
       <TerminalWindow logs={logs} isCalculating={isCalculating} />
       
       {/* CODE GENERATOR MODAL */}
