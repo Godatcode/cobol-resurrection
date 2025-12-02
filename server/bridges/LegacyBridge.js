@@ -15,6 +15,9 @@
 
 const { exec } = require('child_process');
 const path = require('path');
+const logger = require('../utils/logger');
+const errorHandler = require('../utils/errorHandler');
+const retryHandler = require('../utils/retryHandler');
 
 class LegacyBridge {
   /**
@@ -118,64 +121,107 @@ class LegacyBridge {
    * UNIVERSAL METHOD - HANDLES PROCESS SPAWNING, TIMEOUT, ERROR HANDLING
    * 
    * @param {Object} params - INPUT PARAMETERS
+   * @param {Object} options - EXECUTION OPTIONS
+   * @param {boolean} options.enableRetry - ENABLE RETRY LOGIC (DEFAULT: false)
    * @returns {Promise<Object>} CALCULATION RESULT OR ERROR
    */
-  async execute(params) {
+  async execute(params, options = {}) {
+    const { enableRetry = false } = options;
+    
+    // IF RETRY IS ENABLED, WRAP EXECUTION IN RETRY HANDLER
+    if (enableRetry) {
+      return retryHandler.executeWithRetry(
+        () => this._executeOnce(params),
+        { language: this.name, params }
+      );
+    }
+    
+    // OTHERWISE, EXECUTE ONCE
+    return this._executeOnce(params);
+  }
+  
+  /**
+   * EXECUTE CALCULATION ONCE (WITHOUT RETRY)
+   * INTERNAL METHOD CALLED BY execute()
+   * 
+   * @param {Object} params - INPUT PARAMETERS
+   * @returns {Promise<Object>} CALCULATION RESULT OR ERROR
+   */
+  async _executeOnce(params) {
     return new Promise((resolve, reject) => {
+      // LOG EXECUTION START
+      logger.info(`EXECUTING ${this.name} CALCULATION`, {
+        language: this.name,
+        params: params
+      });
+      
       // VALIDATE PARAMETERS
       const validation = this.validateParams(params);
       if (!validation.valid) {
-        return reject({
-          error: 'INVALID INPUT',
-          details: validation.error,
-          language: this.name.toLowerCase()
+        logger.warn(`VALIDATION FAILED for ${this.name}`, {
+          error: validation.error,
+          params: params
         });
+        
+        const validationError = errorHandler.handleValidationError(validation.error, this.name);
+        return reject(validationError);
       }
       
       // BUILD COMMAND
       const command = this.buildCommand(params);
       
+      // LOG PROCESS SPAWNING
+      logger.logProcessExecution(this.name, command, params);
+      
       // SPAWN LEGACY PROCESS WITH TIMEOUT
       exec(command, { timeout: this.timeout }, (error, stdout, stderr) => {
         // HANDLE EXECUTION ERRORS
         if (error) {
-          // TIMEOUT ERROR
-          if (error.killed) {
-            return reject({
-              error: 'CORE DUMP DETECTED',
-              details: `${this.name} PROCESS EXCEEDED ${this.timeout / 1000} SECOND TIMEOUT`,
-              language: this.name.toLowerCase()
-            });
-          }
+          // ATTACH STDERR TO ERROR OBJECT
+          error.stderr = stderr;
           
-          // BINARY NOT FOUND OR NON-ZERO EXIT CODE
-          return reject({
-            error: 'CORE DUMP DETECTED',
-            details: stderr || error.message,
-            language: this.name.toLowerCase()
-          });
+          // GENERATE COMPREHENSIVE ERROR RESPONSE
+          const errorResponse = errorHandler.generateErrorResponse(error, this.name, params);
+          
+          // LOG PROCESS FAILURE
+          logger.logProcessResult(this.name, false, null, errorResponse);
+          
+          return reject(errorResponse);
         }
         
         // PARSE OUTPUT USING SUBCLASS-SPECIFIC PARSER
         const parseResult = this.parseOutput(stdout);
         
         if (!parseResult.success) {
-          return reject({
-            error: 'CORE DUMP DETECTED',
-            details: parseResult.error || `FAILED TO PARSE ${this.name} OUTPUT`,
-            language: this.name.toLowerCase(),
-            raw_output: stdout
-          });
+          // CREATE ERROR OBJECT FOR PARSING FAILURE
+          const parseError = new Error(parseResult.error || `FAILED TO PARSE ${this.name} OUTPUT`);
+          parseError.raw_output = stdout;
+          parseError.stderr = stderr;
+          
+          // GENERATE COMPREHENSIVE ERROR RESPONSE
+          const errorResponse = errorHandler.generateErrorResponse(parseError, this.name, params);
+          
+          // LOG PROCESS FAILURE
+          logger.logProcessResult(this.name, false, null, errorResponse);
+          
+          return reject(errorResponse);
         }
         
-        // RETURN SUCCESSFUL RESPONSE
-        resolve({
+        // BUILD SUCCESSFUL RESPONSE
+        const result = {
           result: parseResult.result,
           source: `${this.name}_LEGACY_ENGINE`,
           language: this.name.toLowerCase(),
           year: this.year,
-          calculation: this.description
-        });
+          calculation: this.description,
+          timestamp: new Date().toISOString()
+        };
+        
+        // LOG PROCESS SUCCESS
+        logger.logProcessResult(this.name, true, result);
+        
+        // RETURN SUCCESSFUL RESPONSE
+        resolve(result);
       });
     });
   }

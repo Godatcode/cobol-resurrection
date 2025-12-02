@@ -21,7 +21,7 @@ class FortranBridge extends LegacyBridge {
       year: 1957,
       binary: 'trajectory',
       description: 'BALLISTIC TRAJECTORY CALCULATOR',
-      params: ['velocity', 'angle']
+      params: ['velocity', 'angle', 'gravity']
     });
   }
   

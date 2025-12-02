@@ -1,0 +1,29 @@
+C     SIMPLE MULTIPLICATION PROGRAM
+      PROGRAM MULTIPLY
+      IMPLICIT NONE
+      
+      REAL NUM1, NUM2, RESULT
+      CHARACTER*20 ARG1, ARG2
+      INTEGER IARGC, NUMARG
+      
+      NUMARG = IARGC()
+      
+      IF (NUMARG .LT. 2) THEN
+          WRITE(0,*) 'ERROR: INSUFFICIENT ARGUMENTS'
+          CALL EXIT(1)
+      END IF
+      
+      CALL GETARG(1, ARG1)
+      CALL GETARG(2, ARG2)
+      
+      READ(ARG1, *) NUM1
+      READ(ARG2, *) NUM2
+      
+      RESULT = NUM1 * NUM2
+      
+      WRITE(6,100) RESULT
+  100 FORMAT('RESULT: ',F10.2)
+      
+      CALL EXIT(0)
+      
+      END

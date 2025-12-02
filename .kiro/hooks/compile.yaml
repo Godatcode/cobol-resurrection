@@ -1,8 +1,79 @@
 name: legacy-auto-compile
+description: "Automatically compiles legacy code (COBOL, FORTRAN, PASCAL, BASIC) when files are saved"
 trigger:
   type: file_save
   pattern: "legacy/**/*.{cbl,f,pas,bas}"
 action:
   type: command
-  command: "bash -c 'if [[ $KIRO_FILE_PATH == *.cbl ]]; then cobc -x -o ${KIRO_FILE_PATH%.cbl} $KIRO_FILE_PATH; elif [[ $KIRO_FILE_PATH == *.f ]]; then gfortran -o ${KIRO_FILE_PATH%.f} $KIRO_FILE_PATH; elif [[ $KIRO_FILE_PATH == *.pas ]]; then fpc -o${KIRO_FILE_PATH%.pas} $KIRO_FILE_PATH; elif [[ $KIRO_FILE_PATH == *.bas ]]; then fbc -o ${KIRO_FILE_PATH%.bas} $KIRO_FILE_PATH; fi'"
-  message: "👻 Ancient Spirit Rebound to Binary - Multi-Language Resurrection Complete."
+  command: |
+    bash -c '
+    FILE="$KIRO_FILE_PATH"
+    BASENAME="${FILE%.*}"
+    
+    echo "🔮 INITIATING COMPILATION SEQUENCE FOR: $FILE"
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    
+    if [[ "$FILE" == *.cbl ]]; then
+      echo "📼 LOADING COBOL COMPILER (GnuCOBOL)..."
+      cobc -x -o "$BASENAME" "$FILE" 2>&1
+      if [ $? -eq 0 ]; then
+        echo "✅ COBOL COMPILATION SUCCESSFUL"
+        echo "👻 Ancient Spirit Rebound to Binary: $(basename $BASENAME)"
+        echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+        exit 0
+      else
+        echo "❌ COBOL COMPILATION FAILED"
+        echo "🐛 MOTH DETECTED IN COBOL PUNCH CARDS"
+        echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+        exit 1
+      fi
+      
+    elif [[ "$FILE" == *.f ]]; then
+      echo "📼 LOADING FORTRAN COMPILER (GNU Fortran)..."
+      gfortran -o "$BASENAME" "$FILE" 2>&1
+      if [ $? -eq 0 ]; then
+        echo "✅ FORTRAN COMPILATION SUCCESSFUL"
+        echo "👻 Ancient Spirit Rebound to Binary: $(basename $BASENAME)"
+        echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+        exit 0
+      else
+        echo "❌ FORTRAN COMPILATION FAILED"
+        echo "🐛 MOTH DETECTED IN FORTRAN PUNCH CARDS"
+        echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+        exit 1
+      fi
+      
+    elif [[ "$FILE" == *.pas ]]; then
+      echo "📼 LOADING PASCAL COMPILER (Free Pascal)..."
+      fpc -o"$BASENAME" "$FILE" 2>&1
+      if [ $? -eq 0 ]; then
+        echo "✅ PASCAL COMPILATION SUCCESSFUL"
+        echo "👻 Ancient Spirit Rebound to Binary: $(basename $BASENAME)"
+        echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+        exit 0
+      else
+        echo "❌ PASCAL COMPILATION FAILED"
+        echo "🐛 MOTH DETECTED IN PASCAL SOURCE"
+        echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+        exit 1
+      fi
+      
+    elif [[ "$FILE" == *.bas ]]; then
+      echo "📼 LOADING BASIC COMPILER (Node.js Wrapper)..."
+      # BASIC uses Node.js wrapper for authentic 1983 semantics
+      # No compilation needed - just verify Node.js is available
+      if command -v node &> /dev/null; then
+        echo "✅ BASIC VALIDATION SUCCESSFUL"
+        echo "👻 Ancient Spirit Bound to Node.js Wrapper: $(basename $BASENAME)"
+        echo "   (Maintains authentic 1983 BASIC calculation semantics)"
+        echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+        exit 0
+      else
+        echo "❌ BASIC VALIDATION FAILED"
+        echo "🐛 NODE.JS INTERPRETER NOT FOUND"
+        echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+        exit 1
+      fi
+    fi
+    '
+  message: "🔮 Legacy Code Compilation Sequence Initiated"

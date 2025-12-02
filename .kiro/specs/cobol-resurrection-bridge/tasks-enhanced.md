@@ -59,7 +59,7 @@
   - Implement universal output parser
   - _Requirements: 9.2, 9.3, 12.2_
 
-- [ ] 9. Create API endpoints for all legacy languages
+- [x] 9. Create API endpoints for all legacy languages
   - POST /api/calculate/cobol (mortgage)
   - POST /api/calculate/fortran (trajectory)
   - POST /api/calculate/pascal (tax)
@@ -67,7 +67,7 @@
   - GET /api/languages (list available languages)
   - _Requirements: 2.1, 9.2, 9.4_
 
-- [ ] 10. Implement error handling and logging
+- [x] 10. Implement error handling and logging
   - Add comprehensive error messages for each language
   - Implement "CORE DUMP DETECTED" responses
   - Add request/response logging
@@ -76,14 +76,14 @@
 
 ## PHASE 3: AI CODE GENERATOR (KILLER FEATURE)
 
-- [ ] 11. Create AI code generation MCP tool
+- [x] 11. Create AI code generation MCP tool
   - Create .kiro/mcp/code-generator.json configuration
   - Define summon_ancient_spirit tool with parameters
   - Implement GPT-4 integration for code generation
   - Add language-specific prompt templates
   - _Requirements: 10.1, 10.2_
 
-- [ ] 12. Implement code generation service
+- [x] 12. Implement code generation service
   - Create /server/services/code-generator.js
   - Add few-shot prompting with vintage code examples
   - Implement syntax validation for generated code

@@ -1,0 +1,21 @@
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. ADDITION-TEST.
+       
+       DATA DIVISION.
+       WORKING-STORAGE SECTION.
+       01 WS-NUM1      PIC 9(5).
+       01 WS-NUM2      PIC 9(5).
+       01 WS-RESULT    PIC 9(6).
+       
+       PROCEDURE DIVISION.
+       MAIN-PROCEDURE.
+           ACCEPT WS-NUM1 FROM ARGUMENT-VALUE
+           ACCEPT WS-NUM2 FROM ARGUMENT-VALUE
+           
+           COMPUTE WS-RESULT = WS-NUM1 + WS-NUM2
+           
+           DISPLAY "RESULT: " WS-RESULT
+           
+           STOP RUN RETURNING 0.
+       
+       END PROGRAM ADDITION-TEST.

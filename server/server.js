@@ -4,6 +4,9 @@ const multer = require('multer');
 const { exec } = require('child_process');
 const path = require('path');
 const bridgeFactory = require('./bridges/BridgeFactory');
+const logger = require('./utils/logger');
+const errorHandler = require('./utils/errorHandler');
+const codeGenerator = require('./services/code-generator');
 
 const app = express();
 const PORT = 3001;
@@ -16,6 +19,23 @@ app.use(cors());
 
 // PARSE JSON REQUEST BODIES
 app.use(express.json());
+
+// ═══════════════════════════════════════════════════════════
+// REQUEST LOGGING MIDDLEWARE
+// ═══════════════════════════════════════════════════════════
+app.use((req, res, next) => {
+  // LOG INCOMING REQUEST
+  logger.logRequest(req);
+  
+  // CAPTURE ORIGINAL res.json TO LOG RESPONSES
+  const originalJson = res.json.bind(res);
+  res.json = function(data) {
+    logger.logResponse(req, res.statusCode, data);
+    return originalJson(data);
+  };
+  
+  next();
+});
 
 // ═══════════════════════════════════════════════════════════
 // LANGUAGE DETECTION MIDDLEWARE
@@ -118,6 +138,133 @@ app.post('/api/calculate', async (req, res) => {
   }
 });
 
+// ═══════════════════════════════════════════════════════════
+// AI CODE GENERATION ENDPOINT - SUMMON ANCIENT SPIRIT
+// ═══════════════════════════════════════════════════════════
+app.post('/api/generate', async (req, res) => {
+  const { code, language, filename } = req.body;
+  
+  // VALIDATE INPUT
+  if (!code || !language || !filename) {
+    return res.status(400).json({
+      error: 'INVALID REQUEST',
+      details: 'MISSING REQUIRED PARAMETERS: code, language, filename',
+      required: ['code', 'language', 'filename']
+    });
+  }
+  
+  // VALIDATE LANGUAGE
+  const supportedLanguages = ['COBOL', 'FORTRAN', 'PASCAL', 'BASIC'];
+  if (!supportedLanguages.includes(language.toUpperCase())) {
+    return res.status(400).json({
+      error: 'UNSUPPORTED LANGUAGE',
+      details: `LANGUAGE '${language}' NOT SUPPORTED FOR CODE GENERATION`,
+      supported: supportedLanguages
+    });
+  }
+  
+  try {
+    logger.info('CODE GENERATION INITIATED', {
+      language: language,
+      filename: filename,
+      code_length: code.length
+    });
+    
+    // VALIDATE SYNTAX
+    const validation = codeGenerator.validateSyntax(code, language);
+    if (!validation.valid) {
+      logger.warn('SYNTAX VALIDATION FAILED', {
+        language: language,
+        filename: filename,
+        errors: validation.errors
+      });
+      
+      return res.status(400).json({
+        error: 'SYNTAX VALIDATION FAILED',
+        details: validation.errors,
+        message: '⚠️ GENERATED CODE CONTAINS SYNTAX ERRORS'
+      });
+    }
+    
+    // SUMMON THE ANCIENT SPIRIT (SAVE AND COMPILE)
+    const result = await codeGenerator.summonAncientSpirit(code, language, filename);
+    
+    if (result.success) {
+      logger.info('CODE GENERATION SUCCESSFUL', {
+        language: language,
+        filename: filename,
+        file_path: result.saved.filePath
+      });
+      
+      res.json({
+        success: true,
+        message: result.message,
+        file_path: result.saved.filePath,
+        language: language,
+        filename: filename,
+        compilation: {
+          success: result.compiled.success,
+          compiler: result.compiled.compiler,
+          message: result.compiled.message
+        }
+      });
+    } else {
+      logger.error('CODE GENERATION FAILED', {
+        language: language,
+        filename: filename,
+        error: result.error
+      });
+      
+      res.status(500).json({
+        success: false,
+        error: 'CODE GENERATION FAILED',
+        details: result.error,
+        message: result.message
+      });
+    }
+  } catch (error) {
+    logger.error('CODE GENERATION ERROR', {
+      language: language,
+      filename: filename,
+      error: error.message
+    });
+    
+    res.status(500).json({
+      error: 'CORE DUMP DETECTED',
+      details: error.message,
+      message: '❌ ANCIENT SPIRIT SUMMONING FAILED'
+    });
+  }
+});
+
+// ═══════════════════════════════════════════════════════════
+// GET LANGUAGE TEMPLATE ENDPOINT
+// ═══════════════════════════════════════════════════════════
+app.get('/api/template/:language', (req, res) => {
+  const { language } = req.params;
+  
+  try {
+    const template = codeGenerator.loadTemplate(language);
+    
+    res.json({
+      language: language,
+      template: template,
+      message: `📜 TEMPLATE LOADED FOR ${language.toUpperCase()}`
+    });
+  } catch (error) {
+    res.status(400).json({
+      error: 'TEMPLATE NOT FOUND',
+      details: error.message,
+      supported: ['COBOL', 'FORTRAN', 'PASCAL', 'BASIC']
+    });
+  }
+});
+
+// ═══════════════════════════════════════════════════════════
+// GLOBAL ERROR HANDLING MIDDLEWARE (MUST BE LAST)
+// ═══════════════════════════════════════════════════════════
+app.use(errorHandler.expressErrorMiddleware());
+
 // START THE SERVER
 app.listen(PORT, () => {
   console.log('═══════════════════════════════════════════════════════');
@@ -126,10 +273,18 @@ app.listen(PORT, () => {
   console.log(`🔌 LISTENING ON PORT ${PORT}`);
   console.log('📡 CORS ENABLED FOR REACT CLIENT');
   console.log('📤 MULTER CONFIGURED FOR FILE UPLOADS');
+  console.log('📋 COMPREHENSIVE LOGGING ENABLED');
+  console.log('🛡️  ERROR RECOVERY MECHANISMS ACTIVE');
   console.log('⚡ READY TO RESURRECT ANCIENT SPIRITS:');
   console.log('   • COBOL (1959) - MORTGAGE CALCULATOR');
   console.log('   • FORTRAN (1957) - TRAJECTORY CALCULATOR');
   console.log('   • PASCAL (1970) - TAX CALCULATOR');
   console.log('   • BASIC (1983) - INTEREST CALCULATOR');
   console.log('═══════════════════════════════════════════════════════');
+  
+  logger.info('NECRO-BRIDGE SERVER STARTED', {
+    port: PORT,
+    supported_languages: bridgeFactory.getSupportedLanguages(),
+    log_level: logger.logLevel
+  });
 });

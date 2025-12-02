@@ -51,5 +51,46 @@
     "enforce_syntax": true,
     "add_comments": true,
     "vintage_conventions": true
+  },
+  "implementation": {
+    "service_path": "server/services/code-generator.js",
+    "template_directory": ".kiro/mcp/prompts",
+    "templates": {
+      "COBOL": ".kiro/mcp/prompts/cobol-template.md",
+      "FORTRAN": ".kiro/mcp/prompts/fortran-template.md",
+      "PASCAL": ".kiro/mcp/prompts/pascal-template.md",
+      "BASIC": ".kiro/mcp/prompts/basic-template.md"
+    },
+    "workflow": [
+      "1. Load language-specific template from prompts directory",
+      "2. Use Kiro AI to generate code following template syntax rules",
+      "3. Validate generated code syntax",
+      "4. Save code to legacy/{language}/ directory",
+      "5. Trigger automatic compilation via agent hook",
+      "6. Return compilation status and binary path"
+    ],
+    "ai_instructions": {
+      "system_prompt": "You are a vintage programming language expert specializing in COBOL (1959), FORTRAN (1957), PASCAL (1970), and BASIC (1983). Generate syntactically correct code following era-appropriate conventions.",
+      "requirements": [
+        "Follow exact syntax rules from the language template",
+        "Use authentic vintage programming style",
+        "Include proper error handling",
+        "Output results in format: RESULT: XXXX.XX",
+        "Add comments explaining the logic",
+        "Use era-appropriate variable naming conventions"
+      ]
+    }
+  },
+  "integration": {
+    "kiro_hooks": {
+      "auto_compile": ".kiro/hooks/compile.yaml",
+      "trigger_pattern": "**/*.{cbl,f,pas,bas}",
+      "on_save_action": "Automatically compile generated code"
+    },
+    "bridge_server": {
+      "endpoint": "/api/generate",
+      "method": "POST",
+      "auto_register": true
+    }
   }
 }

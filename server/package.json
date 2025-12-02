@@ -5,9 +5,13 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "node server.js"
+    "dev": "node server.js",
+    "summon": "node cli/summon-spirit.js"
   },
-  "keywords": ["cobol", "fortran", "pascal", "basic", "bridge", "legacy", "necromancy"],
+  "bin": {
+    "summon-spirit": "./cli/summon-spirit.js"
+  },
+  "keywords": ["cobol", "fortran", "pascal", "basic", "bridge", "legacy", "necromancy", "ai", "code-generation"],
   "author": "IBM 7090 Mainframe",
   "license": "MIT",
   "dependencies": {

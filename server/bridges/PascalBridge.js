@@ -20,7 +20,7 @@ class PascalBridge extends LegacyBridge {
       year: 1970,
       binary: 'tax',
       description: 'PROGRESSIVE TAX CALCULATOR',
-      params: ['income']
+      params: ['income', 'bracket_rate', 'bracket_threshold']
     });
   }
   
