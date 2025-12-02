@@ -1,0 +1,30 @@
+{
+  "mcpServers": {
+    "cobol-legacy-engine": {
+      "command": "node",
+      "args": ["-e", "const { exec } = require('child_process'); const http = require('http'); const server = http.createServer((req, res) => { if (req.method === 'POST') { let body = ''; req.on('data', chunk => body += chunk); req.on('end', () => { const params = JSON.parse(body); exec(`./legacy/mortgage ${params.principal} ${params.rate} ${params.term}`, (error, stdout, stderr) => { res.writeHead(200, {'Content-Type': 'application/json'}); if (error) { res.end(JSON.stringify({error: stderr || error.message})); } else { const match = stdout.match(/RESULT:\\s*(\\d+\\.\\d{2})/); res.end(JSON.stringify({result: match ? parseFloat(match[1]) : null, output: stdout})); } }); }); } }); server.listen(0, () => console.log(`Server on port ${server.address().port}`));"],
+      "disabled": false,
+      "autoApprove": ["run_legacy_calc"]
+    }
+  },
+  "tools": {
+    "run_legacy_calc": {
+      "description": "Execute the COBOL mortgage calculator directly with principal, rate, and term parameters",
+      "parameters": {
+        "principal": {
+          "type": "number",
+          "description": "Loan principal amount in dollars"
+        },
+        "rate": {
+          "type": "number",
+          "description": "Annual interest rate as percentage (e.g., 5.5 for 5.5%)"
+        },
+        "term": {
+          "type": "number",
+          "description": "Loan term in years"
+        }
+      },
+      "command": "./legacy/mortgage {principal} {rate} {term}"
+    }
+  }
+}

@@ -1,0 +1,8 @@
+name: cobol-auto-compile
+trigger:
+  type: file_save
+  pattern: "**/*.cbl"
+action:
+  type: command
+  command: "cobc -x -o legacy/mortgage legacy/mortgage.cbl"
+  message: "👻 Ancient Spirit Rebound to Binary."
