@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import Header from './components/Header'
 import MortgageForm from './components/MortgageForm'
 import TerminalWindow from './components/TerminalWindow'
+import CodeGeneratorModal from './components/CodeGeneratorModal'
 import './App.css'
 
 // Boot sequence configuration as per design document
@@ -15,6 +16,7 @@ const BOOT_SEQUENCE = [
 function App() {
   const [logs, setLogs] = useState([]);
   const [isCalculating, setIsCalculating] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const formatTimestamp = () => {
     const now = new Date();
@@ -57,15 +59,39 @@ function App() {
     }, 1600);
   };
 
+  const handleGenerationComplete = (data) => {
+    addLog(`👻 ANCIENT SPIRIT SUMMONED: ${data.filename}`, 'info');
+    addLog(`📁 FILE: ${data.file_path}`, 'info');
+    addLog(`⚙️ COMPILATION: ${data.compilation.message}`, 'info');
+  };
+
   return (
     <div className="min-h-screen bg-mainframe-black">
       <Header />
+      
+      {/* SUMMON ANCIENT SPIRIT BUTTON */}
+      <div className="max-w-2xl mx-auto px-6 pt-6">
+        <button
+          onClick={() => setIsModalOpen(true)}
+          className="w-full bg-black border-2 border-mainframe-green text-mainframe-green font-mono py-3 px-6 hover:bg-mainframe-green hover:text-black transition-colors mb-6"
+        >
+          👻 SUMMON ANCIENT SPIRIT (AI CODE GENERATOR)
+        </button>
+      </div>
+
       <MortgageForm 
         onCalculationStart={handleCalculationStart}
         onCalculationComplete={handleCalculationComplete}
         onCalculationError={handleCalculationError}
       />
       <TerminalWindow logs={logs} isCalculating={isCalculating} />
+      
+      {/* CODE GENERATOR MODAL */}
+      <CodeGeneratorModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onGenerationComplete={handleGenerationComplete}
+      />
     </div>
   )
 }

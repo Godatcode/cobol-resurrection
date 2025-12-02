@@ -90,14 +90,14 @@
   - Add automatic file saving to legacy directory
   - _Requirements: 10.2, 10.3_
 
-- [ ] 13. Integrate with agent hooks for auto-compilation
+- [x] 13. Integrate with agent hooks for auto-compilation
   - Update .kiro/hooks/compile.yaml to watch all legacy files
   - Add language-specific compilation commands
   - Implement compilation success/failure notifications
   - Test end-to-end: generate → save → compile → execute
   - _Requirements: 10.4, 10.5_
 
-- [ ] 14. Create UI for AI code generation
+- [x] 14. Create UI for AI code generation
   - Add "Summon Ancient Spirit" button to UI
   - Create modal for natural language input
   - Add language selector (COBOL/FORTRAN/PASCAL/BASIC)
