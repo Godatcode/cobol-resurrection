@@ -1,0 +1,21 @@
+{
+  "name": "cobol-resurrection",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "vitest --run"
+  },
+  "repository": {
+    "type": "git",
+    "url": "github.com-personal:Godatcode/cobol-resurrection.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "fast-check": "^4.3.0",
+    "vitest": "^4.0.14"
+  }
+}

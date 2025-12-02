@@ -1,0 +1,17 @@
+{
+  "name": "necro-bank-bridge-server",
+  "version": "1.0.0",
+  "description": "Bridge Server for COBOL Resurrection - Middleware tier that spawns legacy COBOL binaries",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": ["cobol", "bridge", "legacy", "necromancy"],
+  "author": "IBM 7090 Mainframe",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5"
+  }
+}

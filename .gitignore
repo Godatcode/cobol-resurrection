@@ -1,0 +1,50 @@
+# NODE.JS DEPENDENCIES (WASTEFUL MODERN BLOAT)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+
+# BUILD ARTIFACTS
+dist/
+build/
+*.log
+
+# COMPILED COBOL BINARIES
+legacy/mortgage
+*.exe
+*.o
+*.so
+
+# ENVIRONMENT VARIABLES (SECURITY PROTOCOLS)
+.env
+.env.local
+.env.*.local
+
+# EDITOR CONFIGURATIONS (UNNECESSARY MODERN TOOLS)
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OPERATING SYSTEM DETRITUS
+.DS_Store
+Thumbs.db
+
+# TEST COVERAGE REPORTS
+coverage/
+.nyc_output/
+
+# TEMPORARY FILES
+*.tmp
+*.temp
+.cache/
+
+# REACT/VITE BUILD OUTPUT
+client/dist/
+client/build/
+
+# SERVER BUILD OUTPUT (IF APPLICABLE)
+server/dist/
+server/build/

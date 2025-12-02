@@ -7,7 +7,7 @@
   - Create .kiro/steering/persona.md with IBM 7090 Mainframe persona
   - _Requirements: 7.1, 7.5, 4.2, 4.3, 5.1, 6.4_
 
-- [ ] 2. Implement COBOL mortgage calculator
+- [x] 2. Implement COBOL mortgage calculator
   - Write mortgage.cbl with GnuCOBOL-compatible syntax
   - Implement command-line argument parsing for principal, rate, and term
   - Implement mortgage calculation using formula M = P [ i(1 + i)^n ] / [ (1 + i)^n – 1 ]
@@ -15,25 +15,25 @@
   - Implement input validation and error handling with STDERR messages
   - _Requirements: 1.1, 1.2, 1.3, 1.4_
 
-- [ ] 2.1 Write property test for COBOL calculation accuracy
+- [x] 2.1 Write property test for COBOL calculation accuracy
   - **Property 1: COBOL Mortgage Calculation Accuracy**
   - **Validates: Requirements 1.2**
 
-- [ ] 2.2 Write property test for COBOL output format
+- [x] 2.2 Write property test for COBOL output format
   - **Property 2: COBOL Output Format Consistency**
   - **Validates: Requirements 1.3**
 
-- [ ] 2.3 Write property test for COBOL error handling
+- [x] 2.3 Write property test for COBOL error handling
   - **Property 3: COBOL Error Handling**
   - **Validates: Requirements 1.4**
 
-- [ ] 2.4 Write unit tests for COBOL edge cases
+- [x] 2.4 Write unit tests for COBOL edge cases
   - Test specific examples: $200,000 at 5.5% for 30 years
   - Test edge cases: $1 principal, 29.99% rate, 1 year term
   - Test error messages for invalid inputs
   - _Requirements: 1.2, 1.4_
 
-- [ ] 3. Initialize Node.js Bridge Server
+- [x] 3. Initialize Node.js Bridge Server
   - Create /server directory with package.json
   - Install dependencies: express, cors
   - Create server.js with Express app setup
