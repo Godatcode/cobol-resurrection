@@ -2,9 +2,9 @@
 
 ## Overview
 
-The COBOL Resurrection Bridge is a three-tier architecture that demonstrates legacy system integration through a "cyber-necromancy" approach. The system consists of a COBOL-based calculation engine (legacy tier), a Node.js Express API bridge (middleware tier), and a React-based haunted mainframe UI (presentation tier). The architecture enables modern web applications to leverage battle-tested COBOL business logic while maintaining clear separation of concerns.
+The COBOL Resurrection Bridge is a multi-tier architecture that demonstrates universal legacy system integration through a "cyber-necromancy" approach. The system consists of multiple legacy language engines (COBOL 1959, FORTRAN 1957, PASCAL 1970, BASIC 1983), an AI-powered code generator, a Node.js Express API bridge (middleware tier), and a React-based immersive mainframe museum UI (presentation tier). The architecture enables modern web applications to leverage battle-tested legacy business logic from multiple eras while maintaining clear separation of concerns.
 
-The key innovation is the Bridge Server pattern, which uses process spawning and stream parsing to communicate with the compiled COBOL binary, effectively treating the legacy code as a microservice. This approach preserves the COBOL code in its original form while making it accessible to modern web technologies.
+The key innovations are: (1) The Universal Bridge Server pattern, which uses process spawning and stream parsing to communicate with any compiled legacy binary, effectively treating vintage code as microservices; (2) AI-Powered Legacy Code Generation using Kiro MCP tools to generate syntactically correct vintage code on demand; (3) Immersive Vintage Computing Experience with authentic visual and audio elements; (4) Reusable Open-Source Toolkit for legacy modernization. This approach preserves legacy code in its original form while making it accessible to modern web technologies and AI systems.
 
 ## Architecture
 
@@ -55,28 +55,52 @@ The key innovation is the Bridge Server pattern, which uses process spawning and
 
 ## Components and Interfaces
 
-### 1. Legacy Engine (COBOL)
+### 1. Legacy Engine Suite (Multi-Language)
 
-**File:** `/legacy/mortgage.cbl`
+**Files:**
+- `/legacy/mortgage.cbl` (COBOL - 1959)
+- `/legacy/trajectory.f` (FORTRAN - 1957)
+- `/legacy/tax.pas` (PASCAL - 1970)
+- `/legacy/interest.bas` (BASIC - 1983)
 
 **Responsibilities:**
-- Accept command-line arguments for principal, rate, and term
-- Perform mortgage calculation using standard amortization formula
-- Output result in standardized format to STDOUT
+- Accept command-line arguments specific to each calculation type
+- Perform calculations using era-appropriate algorithms
+- Output results in standardized format to STDOUT
+- Demonstrate authentic vintage programming styles
 
-**Interface:**
+**Universal Interface:**
 ```
-Input:  Command-line arguments [PRINCIPAL] [RATE] [TERM]
-Output: STDOUT text "RESULT: XXXX.XX"
+Input:  Command-line arguments [PARAM1] [PARAM2] [PARAM3]...
+Output: STDOUT text "RESULT: XXXX.XX" or "RESULT: <value>"
 Exit:   0 for success, non-zero for errors
 ```
 
-**Key Design Decisions:**
-- Use GnuCOBOL (OpenCOBOL) dialect for maximum compatibility
-- Accept annual interest rate as percentage (e.g., 5.5 for 5.5%)
-- Convert annual rate to monthly rate internally (divide by 12 and 100)
-- Use COMPUTATIONAL-2 (floating-point) for precision in calculations
-- Format output with exactly 2 decimal places
+**Language-Specific Implementations:**
+
+**COBOL (mortgage.cbl):**
+- Mortgage payment calculation: M = P [ i(1 + i)^n ] / [ (1 + i)^n – 1 ]
+- Use GnuCOBOL (OpenCOBOL) dialect
+- COMPUTATIONAL-2 for floating-point precision
+- Authentic 1959 COBOL syntax with IDENTIFICATION DIVISION
+
+**FORTRAN (trajectory.f):**
+- Ballistic trajectory calculation: range = (v² × sin(2θ)) / g
+- Use GNU Fortran (gfortran) compiler
+- Fixed-format source (columns 1-72)
+- Authentic 1957 FORTRAN syntax with DIMENSION statements
+
+**PASCAL (tax.pas):**
+- Progressive tax calculation with brackets
+- Use Free Pascal Compiler (fpc)
+- Authentic 1970 Pascal syntax with BEGIN/END blocks
+- Structured programming style
+
+**BASIC (interest.bas):**
+- Compound interest: A = P(1 + r/n)^(nt)
+- Use FreeBASIC compiler
+- Authentic 1983 BASIC syntax with line numbers
+- GOTO statements for vintage authenticity
 
 ### 2. Bridge Server (Node.js/Express)
 
@@ -226,6 +250,108 @@ You are an IBM 7090 Mainframe from 1959. When working on the COBOL Resurrection 
 
 [END OF TAPE]
 ```
+
+### 7. AI Code Generator (MCP Tool)
+
+**File:** `.kiro/mcp/code-generator.json`
+
+**Responsibilities:**
+- Accept natural language descriptions of calculations
+- Generate syntactically correct COBOL code
+- Save generated code to legacy directory
+- Trigger automatic compilation via agent hooks
+
+**Tool Definition:**
+```json
+{
+  "name": "summon_ancient_spirit",
+  "description": "Generate COBOL code from natural language description",
+  "parameters": {
+    "description": { "type": "string", "description": "What the code should calculate" },
+    "language": { "type": "string", "enum": ["COBOL", "FORTRAN", "PASCAL", "BASIC"] }
+  },
+  "implementation": "Uses GPT-4 to generate vintage code with era-appropriate syntax"
+}
+```
+
+**Code Generation Strategy:**
+- Use few-shot prompting with authentic vintage examples
+- Enforce era-specific syntax rules (e.g., COBOL column formatting)
+- Include proper error handling in generated code
+- Generate descriptive variable names following vintage conventions
+- Add comments explaining the calculation logic
+
+### 8. Immersive UI Components
+
+**Visual Enhancement Components:**
+
+**Punch Card Visualizer:**
+- Converts COBOL source to IBM 80-column punch card representation
+- Displays authentic hole patterns (12 rows × 80 columns)
+- Color-coded: data holes (black), control holes (red)
+- Interactive: hover shows character mapping
+
+**Tape Reel Animator:**
+- SVG-based spinning tape reels
+- Realistic acceleration/deceleration physics
+- Speed correlates with calculation complexity
+- Authentic IBM 729 tape drive styling
+
+**Panel Lights Display:**
+- Grid of blinking LEDs showing binary patterns
+- Patterns represent actual memory addresses during execution
+- Authentic IBM 7090 console panel layout
+- Configurable blink rate and patterns
+
+**Core Memory Dump:**
+- Hexadecimal memory visualization on errors
+- Authentic formatting: 16 bytes per line
+- Color-coded: code (green), data (yellow), stack (red)
+- ASCII representation in right column
+
+**Sound Effects Library:**
+- Teletype clacking (key press sounds)
+- Tape drive motor (startup/running/stop)
+- Card reader mechanical sounds
+- Console bell (on completion)
+- Error buzzer (on failures)
+
+### 9. Legacy Modernization Toolkit
+
+**NPM Package:** `@necro-bridge/core`
+
+**CLI Commands:**
+```bash
+necro-bridge init <language>     # Initialize bridge for legacy language
+necro-bridge detect              # Auto-detect legacy binaries
+necro-bridge serve               # Start bridge server
+necro-bridge test <binary>       # Test legacy binary integration
+```
+
+**Package Structure:**
+```
+@necro-bridge/core/
+├── templates/
+│   ├── cobol-bridge.js
+│   ├── fortran-bridge.js
+│   ├── pascal-bridge.js
+│   └── basic-bridge.js
+├── parsers/
+│   ├── stdout-parser.js
+│   └── stderr-parser.js
+├── compilers/
+│   ├── cobol-compiler.js
+│   └── multi-compiler.js
+└── server/
+    └── express-wrapper.js
+```
+
+**Key Features:**
+- Auto-detection of legacy compilers on system
+- Standardized JSON API generation
+- Built-in error handling and logging
+- Docker support for legacy compiler environments
+- TypeScript definitions for type safety
 
 ## Data Models
 

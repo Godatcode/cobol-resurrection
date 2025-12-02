@@ -2,7 +2,7 @@
 
 ## Introduction
 
-The COBOL Resurrection Bridge is a hackathon project that demonstrates "cyber-necromancy" by resurrecting ancient COBOL banking code within a modern Node.js and React environment. The system allows users to calculate mortgage payments using a legacy COBOL engine through a haunted mainframe-themed web interface, showcasing the integration of 1960s-era programming with contemporary web technologies.
+The COBOL Resurrection Bridge is a hackathon project that demonstrates "cyber-necromancy" by resurrecting multiple ancient programming languages (COBOL, FORTRAN, PASCAL, BASIC) within a modern Node.js and React environment. The system features an AI-powered code generator that can summon legacy code on demand, a visually stunning mainframe museum interface, and a reusable bridge pattern framework. This project showcases the ultimate integration of vintage computing (1950s-1980s) with contemporary web technologies and AI capabilities, while providing practical value as an open-source legacy modernization toolkit.
 
 ## Glossary
 
@@ -111,3 +111,64 @@ The COBOL Resurrection Bridge is a hackathon project that demonstrates "cyber-ne
 3. WHEN the calculation is in progress THEN the Terminal Window SHALL show at least 3 distinct status messages
 4. WHEN the result is ready THEN the Terminal Window SHALL display the final monthly payment in the log sequence
 5. WHEN multiple calculations are performed THEN the Terminal Window SHALL append new logs while preserving previous entries or clear and restart the sequence
+
+
+### Requirement 9
+
+**User Story:** As a hackathon judge, I want to see multiple legacy languages resurrected, so that I can evaluate the scalability and universality of the bridge pattern.
+
+#### Acceptance Criteria
+
+1. WHEN the system is initialized THEN the Legacy Engine SHALL support COBOL (1959), FORTRAN (1957), PASCAL (1970), and BASIC (1983) programs
+2. WHEN a user selects a legacy language THEN the Bridge Server SHALL route requests to the appropriate compiled binary
+3. WHEN each legacy program executes THEN the system SHALL return results in standardized JSON format regardless of source language
+4. WHEN displaying results THEN the Necro-Bank UI SHALL indicate which legacy language processed the calculation
+5. WHEN switching between languages THEN the system SHALL maintain consistent performance and error handling across all legacy engines
+
+### Requirement 10
+
+**User Story:** As a developer, I want AI to generate legacy code on demand, so that I can quickly create new calculations without writing vintage syntax manually.
+
+#### Acceptance Criteria
+
+1. WHEN a user invokes the "Summon Ancient Spirit" feature THEN the system SHALL accept a natural language description of the desired calculation
+2. WHEN the AI receives the description THEN the system SHALL generate syntactically correct COBOL code that implements the requested functionality
+3. WHEN the code generation completes THEN the system SHALL automatically save the generated code to the legacy directory
+4. WHEN the file is saved THEN the Agent Hook SHALL automatically compile the new COBOL program
+5. WHEN compilation succeeds THEN the Bridge Server SHALL immediately make the new calculation available via API
+
+### Requirement 11
+
+**User Story:** As a user, I want an immersive vintage computing experience, so that I feel like I'm operating a real 1960s mainframe computer.
+
+#### Acceptance Criteria
+
+1. WHEN the Necro-Bank UI displays COBOL code THEN the system SHALL render it as ASCII punch card visualization with authentic hole patterns
+2. WHEN calculations are executing THEN the system SHALL display animated tape reels that spin realistically
+3. WHEN the interface is active THEN the system SHALL show blinking panel lights with random binary patterns
+4. IF an error occurs THEN the system SHALL display a core memory hexadecimal dump visualization
+5. WHEN user interactions occur THEN the system SHALL play authentic teletype and mainframe sound effects
+
+### Requirement 12
+
+**User Story:** As a software architect, I want to package the bridge pattern as a reusable toolkit, so that others can modernize their own legacy systems.
+
+#### Acceptance Criteria
+
+1. WHEN the toolkit is installed via npm THEN the system SHALL provide a CLI command `necro-bridge init <language>`
+2. WHEN the init command runs THEN the system SHALL generate bridge server templates for the specified legacy language
+3. WHEN the toolkit is used THEN the system SHALL auto-detect legacy binaries in the project directory
+4. WHEN legacy programs execute through the toolkit THEN the system SHALL provide standardized JSON API wrappers automatically
+5. WHEN documentation is accessed THEN the system SHALL provide comprehensive examples for COBOL, FORTRAN, PASCAL, and BASIC integration
+
+### Requirement 13
+
+**User Story:** As a hackathon presenter, I want a spectacular demo experience, so that judges remember my project and vote for it.
+
+#### Acceptance Criteria
+
+1. WHEN the demo begins THEN the system SHALL display a vintage IBM boot sequence with authentic startup messages
+2. WHEN demonstrating AI code generation THEN the system SHALL show real-time code appearing with typewriter effect
+3. WHEN showcasing multi-language support THEN the system SHALL execute calculations in all four legacy languages within 30 seconds
+4. WHEN revealing architecture THEN the system SHALL display animated diagrams showing the bridge pattern flow
+5. WHEN the demo concludes THEN the system SHALL display a QR code linking to the GitHub repository and live deployment

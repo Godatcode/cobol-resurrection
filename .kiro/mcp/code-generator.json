@@ -1,0 +1,55 @@
+{
+  "name": "summon_ancient_spirit",
+  "description": "AI-powered legacy code generator that creates syntactically correct vintage code from natural language descriptions",
+  "version": "1.0.0",
+  "capabilities": {
+    "languages": ["COBOL", "FORTRAN", "PASCAL", "BASIC"],
+    "eras": {
+      "COBOL": "1959 - GnuCOBOL dialect",
+      "FORTRAN": "1957 - Fixed-format FORTRAN IV",
+      "PASCAL": "1970 - Standard Pascal",
+      "BASIC": "1983 - Line-numbered BASIC"
+    }
+  },
+  "parameters": {
+    "description": {
+      "type": "string",
+      "required": true,
+      "description": "Natural language description of the desired calculation or algorithm"
+    },
+    "language": {
+      "type": "string",
+      "required": true,
+      "enum": ["COBOL", "FORTRAN", "PASCAL", "BASIC"],
+      "description": "Target legacy programming language"
+    },
+    "filename": {
+      "type": "string",
+      "required": true,
+      "description": "Output filename without extension (e.g., 'mortgage', 'trajectory')"
+    }
+  },
+  "output": {
+    "directory": "legacy/{language_lowercase}",
+    "extension_map": {
+      "COBOL": ".cbl",
+      "FORTRAN": ".f",
+      "PASCAL": ".pas",
+      "BASIC": ".bas"
+    },
+    "auto_compile": true,
+    "compile_commands": {
+      "COBOL": "cobc -x -o legacy/cobol/{filename} legacy/cobol/{filename}.cbl",
+      "FORTRAN": "gfortran -o legacy/fortran/{filename} legacy/fortran/{filename}.f",
+      "PASCAL": "fpc -olegacy/pascal/{filename} legacy/pascal/{filename}.pas",
+      "BASIC": "fbc -o legacy/basic/{filename} legacy/basic/{filename}.bas"
+    }
+  },
+  "prompting_strategy": {
+    "approach": "few-shot",
+    "include_examples": true,
+    "enforce_syntax": true,
+    "add_comments": true,
+    "vintage_conventions": true
+  }
+}

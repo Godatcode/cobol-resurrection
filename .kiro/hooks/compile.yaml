@@ -1,8 +1,8 @@
-name: cobol-auto-compile
+name: legacy-auto-compile
 trigger:
   type: file_save
-  pattern: "**/*.cbl"
+  pattern: "legacy/**/*.{cbl,f,pas,bas}"
 action:
   type: command
-  command: "cobc -x -o legacy/mortgage legacy/mortgage.cbl"
-  message: "👻 Ancient Spirit Rebound to Binary."
+  command: "bash -c 'if [[ $KIRO_FILE_PATH == *.cbl ]]; then cobc -x -o ${KIRO_FILE_PATH%.cbl} $KIRO_FILE_PATH; elif [[ $KIRO_FILE_PATH == *.f ]]; then gfortran -o ${KIRO_FILE_PATH%.f} $KIRO_FILE_PATH; elif [[ $KIRO_FILE_PATH == *.pas ]]; then fpc -o${KIRO_FILE_PATH%.pas} $KIRO_FILE_PATH; elif [[ $KIRO_FILE_PATH == *.bas ]]; then fbc -o ${KIRO_FILE_PATH%.bas} $KIRO_FILE_PATH; fi'"
+  message: "👻 Ancient Spirit Rebound to Binary - Multi-Language Resurrection Complete."

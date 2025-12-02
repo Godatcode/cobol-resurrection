@@ -1,10 +1,10 @@
 {
   "mcpServers": {
-    "cobol-legacy-engine": {
+    "necro-bridge-engine": {
       "command": "node",
-      "args": ["-e", "const { exec } = require('child_process'); const http = require('http'); const server = http.createServer((req, res) => { if (req.method === 'POST') { let body = ''; req.on('data', chunk => body += chunk); req.on('end', () => { const params = JSON.parse(body); exec(`./legacy/mortgage ${params.principal} ${params.rate} ${params.term}`, (error, stdout, stderr) => { res.writeHead(200, {'Content-Type': 'application/json'}); if (error) { res.end(JSON.stringify({error: stderr || error.message})); } else { const match = stdout.match(/RESULT:\\s*(\\d+\\.\\d{2})/); res.end(JSON.stringify({result: match ? parseFloat(match[1]) : null, output: stdout})); } }); }); } }); server.listen(0, () => console.log(`Server on port ${server.address().port}`));"],
+      "args": ["-e", "const { exec } = require('child_process'); const http = require('http'); const server = http.createServer((req, res) => { if (req.method === 'POST') { let body = ''; req.on('data', chunk => body += chunk); req.on('end', () => { const params = JSON.parse(body); const cmd = params.binary || './legacy/mortgage'; const args = params.args || `${params.principal} ${params.rate} ${params.term}`; exec(`${cmd} ${args}`, (error, stdout, stderr) => { res.writeHead(200, {'Content-Type': 'application/json'}); if (error) { res.end(JSON.stringify({error: stderr || error.message})); } else { const match = stdout.match(/RESULT:\\s*([\\d.]+)/); res.end(JSON.stringify({result: match ? parseFloat(match[1]) : null, output: stdout})); } }); }); } }); server.listen(0, () => console.log(`Server on port ${server.address().port}`));"],
       "disabled": false,
-      "autoApprove": ["run_legacy_calc"]
+      "autoApprove": ["run_legacy_calc", "summon_ancient_spirit", "execute_legacy_binary"]
     }
   },
   "tools": {
@@ -25,6 +25,39 @@
         }
       },
       "command": "./legacy/mortgage {principal} {rate} {term}"
+    },
+    "execute_legacy_binary": {
+      "description": "Execute any legacy binary (COBOL, FORTRAN, PASCAL, BASIC) with custom arguments",
+      "parameters": {
+        "binary": {
+          "type": "string",
+          "description": "Path to the legacy binary (e.g., ./legacy/trajectory, ./legacy/tax)"
+        },
+        "args": {
+          "type": "string",
+          "description": "Space-separated arguments to pass to the binary"
+        }
+      },
+      "command": "{binary} {args}"
+    },
+    "summon_ancient_spirit": {
+      "description": "Generate legacy code (COBOL/FORTRAN/PASCAL/BASIC) from natural language description using AI",
+      "parameters": {
+        "description": {
+          "type": "string",
+          "description": "Natural language description of what the code should calculate"
+        },
+        "language": {
+          "type": "string",
+          "enum": ["COBOL", "FORTRAN", "PASCAL", "BASIC"],
+          "description": "Target legacy programming language"
+        },
+        "filename": {
+          "type": "string",
+          "description": "Output filename (without extension)"
+        }
+      },
+      "implementation": "AI-powered code generation with era-appropriate syntax"
     }
   }
 }
