@@ -25,7 +25,20 @@ Necro-Bridge is a universal bridge pattern framework that allows you to:
 npm install -g @necro-bridge/core
 ```
 
-### Initialize a Bridge
+### Option 1: Interactive Setup Wizard (Recommended for First-Time Users)
+
+```bash
+necro-bridge setup
+```
+
+The setup wizard will guide you through:
+- Project configuration
+- Language selection
+- Compiler detection
+- Directory structure creation
+- Example program generation
+
+### Option 2: Manual Initialization
 
 ```bash
 # Create a bridge for your COBOL program
@@ -42,6 +55,12 @@ necro-bridge init basic
 ```bash
 necro-bridge detect
 ```
+
+This will:
+- Scan for compiled binaries
+- Check installed compilers
+- Generate configuration file
+- Link binaries to source files
 
 ### Start the Bridge Server
 
@@ -132,6 +151,25 @@ Response:
 
 ## 🛠️ CLI Commands
 
+### `necro-bridge setup`
+
+**Interactive setup wizard for first-time users.**
+
+Guides you through project initialization with questions about:
+- Project name and configuration
+- Languages to support
+- Directory structure
+- Compiler availability
+- Example program generation
+
+**Example:**
+```bash
+necro-bridge setup
+# Follow the interactive prompts
+```
+
+See [AUTO-DETECTION.md](./AUTO-DETECTION.md) for detailed documentation.
+
 ### `necro-bridge init <language>`
 
 Initialize a bridge for a specific legacy language.
@@ -149,15 +187,34 @@ necro-bridge init cobol
 
 ### `necro-bridge detect`
 
-Auto-detect legacy binaries in your project directory and generate configuration.
+**Auto-detect legacy binaries in your project directory and generate configuration.**
+
+Features:
+- Scans directories recursively for executable binaries
+- Detects language based on directory structure and source files
+- Checks for installed compilers in system PATH
+- Generates `necro-bridge.config.json` with intelligent defaults
+- Links binaries to their source files
+
+**Options:**
+- `--directory <path>` - Directory to scan (default: `./legacy`)
 
 **Example:**
 ```bash
 necro-bridge detect
-# Found: ./legacy/mortgage (COBOL)
-# Found: ./legacy/trajectory (FORTRAN)
-# Configuration saved to necro-bridge.config.json
+# 🔧 CHECKING FOR INSTALLED COMPILERS...
+#    ✓ COBOL    INSTALLED (/usr/local/bin/cobc)
+#    ✓ FORTRAN  INSTALLED (/usr/local/bin/gfortran)
+# 
+# 📡 SCANNING FOR LEGACY BINARIES...
+#    ✓ Found: ./legacy/cobol/mortgage (COBOL)
+#    ✓ Found: ./legacy/fortran/trajectory (FORTRAN)
+# 
+# ✅ FOUND 2 LEGACY BINARY(IES)
+# ✓ Configuration saved to: necro-bridge.config.json
 ```
+
+See [AUTO-DETECTION.md](./AUTO-DETECTION.md) for detailed documentation.
 
 ### `necro-bridge serve`
 
@@ -215,10 +272,14 @@ Pre-built templates for each language include:
 ### Auto-Detection
 
 Automatically discovers:
-- Compiled binaries in project
-- Legacy source files (.cbl, .f, .pas, .bas)
-- Installed compilers
-- Generates configuration
+- **Compiled binaries** in project directories (recursive scan)
+- **Legacy source files** (.cbl, .cob, .f, .f90, .for, .pas, .pp, .bas, .bi)
+- **Installed compilers** in system PATH with full paths
+- **Language detection** based on directory structure and file extensions
+- **Binary-to-source linking** for traceability
+- **Intelligent configuration** with language-specific defaults
+
+The auto-detection system eliminates manual configuration by scanning your project and generating a complete `necro-bridge.config.json` file. See [AUTO-DETECTION.md](./AUTO-DETECTION.md) for complete documentation.
 
 ## 🔧 Configuration
 

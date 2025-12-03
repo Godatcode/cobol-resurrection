@@ -103,7 +103,8 @@ function detectCompilers(): Record<string, boolean> {
   Object.entries(compilers).forEach(([lang, installed]) => {
     const status = installed ? '✓' : '✗';
     const langUpper = lang.toUpperCase().padEnd(8);
-    console.log(`   ${status} ${langUpper} ${installed ? 'INSTALLED' : 'NOT FOUND'}`);
+    const pathInfo = installed ? getCompilerPath(getCompilerCommand(lang)) : '';
+    console.log(`   ${status} ${langUpper} ${installed ? 'INSTALLED' : 'NOT FOUND'}${pathInfo ? ' (' + pathInfo + ')' : ''}`);
   });
   
   return compilers;
@@ -115,6 +116,26 @@ function checkCompiler(command: string, expectedOutput: string): boolean {
     return output.includes(expectedOutput) || output.length > 0;
   } catch {
     return false;
+  }
+}
+
+function getCompilerCommand(language: string): string {
+  const commands: Record<string, string> = {
+    cobol: 'cobc',
+    fortran: 'gfortran',
+    pascal: 'fpc',
+    basic: 'fbc'
+  };
+  return commands[language] || '';
+}
+
+function getCompilerPath(command: string): string {
+  try {
+    // USE 'which' ON UNIX-LIKE SYSTEMS TO FIND COMPILER PATH
+    const path = execSync(`which ${command}`, { encoding: 'utf-8', stdio: 'pipe' }).trim();
+    return path;
+  } catch {
+    return '';
   }
 }
 
@@ -170,10 +191,17 @@ function detectLanguage(directory: string, filename: string): string | null {
   // CHECK FOR SOURCE FILES IN SAME DIRECTORY
   const files = fs.readdirSync(directory);
   
-  if (files.some(f => f.endsWith('.cbl'))) return 'cobol';
-  if (files.some(f => f.endsWith('.f') || f.endsWith('.f90'))) return 'fortran';
-  if (files.some(f => f.endsWith('.pas'))) return 'pascal';
-  if (files.some(f => f.endsWith('.bas'))) return 'basic';
+  if (files.some(f => f.endsWith('.cbl') || f.endsWith('.cob'))) return 'cobol';
+  if (files.some(f => f.endsWith('.f') || f.endsWith('.f90') || f.endsWith('.for'))) return 'fortran';
+  if (files.some(f => f.endsWith('.pas') || f.endsWith('.pp'))) return 'pascal';
+  if (files.some(f => f.endsWith('.bas') || f.endsWith('.bi'))) return 'basic';
+  
+  // CHECK IF BINARY NAME MATCHES KNOWN SOURCE FILE
+  const baseName = filename.replace(/\.(exe|out)$/, '');
+  if (files.some(f => f === baseName + '.cbl' || f === baseName + '.cob')) return 'cobol';
+  if (files.some(f => f === baseName + '.f' || f === baseName + '.f90' || f === baseName + '.for')) return 'fortran';
+  if (files.some(f => f === baseName + '.pas' || f === baseName + '.pp')) return 'pascal';
+  if (files.some(f => f === baseName + '.bas' || f === baseName + '.bi')) return 'basic';
   
   return null;
 }
@@ -193,17 +221,46 @@ function findSourceFile(directory: string, binaryName: string): string | undefin
 
 function generateConfiguration(binaries: DetectedBinary[]): any {
   return {
+    project: {
+      name: 'necro-bridge-project',
+      version: '1.0.0',
+      description: 'Legacy system integration via Necro-Bridge',
+      languages: [...new Set(binaries.map(b => b.language))]
+    },
     binaries: binaries.map(binary => ({
       name: binary.name,
       path: binary.path,
       language: binary.language,
-      endpoint: `/api/calculate/${binary.language}`,
-      parameters: ['param1', 'param2', 'param3'],
-      outputPattern: 'RESULT:\\s*(\\d+\\.\\d{2})'
+      endpoint: `/api/calculate/${binary.language}/${binary.name}`,
+      parameters: getDefaultParameters(binary.language),
+      outputPattern: getDefaultOutputPattern(binary.language),
+      timeout: 5000
     })),
     server: {
       port: 3001,
-      timeout: 5000
+      timeout: 5000,
+      cors: true,
+      logging: true
+    },
+    paths: {
+      legacy: './legacy',
+      server: './server',
+      bridges: './server/bridges'
     }
   };
+}
+
+function getDefaultParameters(language: string): string[] {
+  const defaults: Record<string, string[]> = {
+    cobol: ['principal', 'rate', 'term'],
+    fortran: ['velocity', 'angle', 'gravity'],
+    pascal: ['income', 'deductions', 'rate'],
+    basic: ['principal', 'rate', 'time']
+  };
+  return defaults[language] || ['param1', 'param2', 'param3'];
+}
+
+function getDefaultOutputPattern(language: string): string {
+  // ALL LANGUAGES USE STANDARDIZED OUTPUT FORMAT
+  return 'RESULT:\\s*([\\d.]+)';
 }

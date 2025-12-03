@@ -154,7 +154,7 @@
   - Ensure sounds are authentic vintage recordings
   - _Requirements: 11.5_
 
-- [ ] 21. Create multi-language calculator interface
+- [x] 21. Create multi-language calculator interface
   - Add language selector dropdown (COBOL/FORTRAN/PASCAL/BASIC)
   - Create dynamic form inputs based on selected language
   - Implement language-specific parameter labels
@@ -187,7 +187,7 @@
   - Implement test command for integration testing
   - _Requirements: 12.1, 12.2, 12.3_
 
-- [ ] 25. Create bridge templates
+- [x] 25. Create bridge templates
   - Create templates/cobol-bridge.js
   - Create templates/fortran-bridge.js
   - Create templates/pascal-bridge.js
@@ -195,14 +195,14 @@
   - Add standardized JSON API wrapper generation
   - _Requirements: 12.2, 12.4_
 
-- [ ] 26. Implement auto-detection system
+- [x] 26. Implement auto-detection system
   - Create compiler detection logic (check PATH)
   - Implement binary discovery in project directories
   - Add configuration file generation
   - Create setup wizard for first-time users
   - _Requirements: 12.3_
 
-- [ ] 27. Create comprehensive documentation
+- [x] 27. Create comprehensive documentation
   - Write README with quick start guide
   - Create API documentation for all endpoints
   - Add examples for each legacy language

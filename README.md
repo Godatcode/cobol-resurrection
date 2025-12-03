@@ -1,35 +1,46 @@
 # 🏦 COBOL RESURRECTION BRIDGE
 
-> **CYBER-NECROMANCY IN ACTION**: Resurrecting 1960s COBOL banking code within modern Node.js and React infrastructure.
+> **CYBER-NECROMANCY IN ACTION**: Resurrecting vintage programming languages (COBOL 1959, FORTRAN 1957, PASCAL 1970, BASIC 1983) within modern Node.js and React infrastructure.
 
-A hackathon project demonstrating legacy system integration through a "haunted mainframe" themed web application. Calculate mortgage payments using genuine COBOL business logic from the punch-card era, bridged to contemporary web technologies.
+A hackathon project demonstrating universal legacy system integration through a "haunted mainframe" themed web application. Execute calculations using genuine vintage business logic from four different eras, bridged to contemporary web technologies through an AI-powered code generator and immersive museum interface.
 
 ---
 
 ## 📼 SYSTEM OVERVIEW
 
-The COBOL Resurrection Bridge is a three-tier architecture that treats legacy COBOL code as a microservice:
+The COBOL Resurrection Bridge is a universal three-tier architecture that treats legacy code from FOUR vintage languages as microservices:
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                  NECRO-BANK UI (React)                      │
-│              Haunted Mainframe Interface                    │
+│              NECRO-BANK UI (React + TypeScript)             │
+│    Immersive Mainframe Museum with AI Code Generator       │
+│  🎴 Punch Cards | 📼 Tape Reels | 💡 Panel Lights | 🔊 Audio│
 └────────────────────────┬────────────────────────────────────┘
-                         │ HTTP POST /api/calculate
+                         │ HTTP POST /api/calculate/{language}
                          ▼
 ┌─────────────────────────────────────────────────────────────┐
-│              BRIDGE SERVER (Node.js/Express)                │
-│           Process Spawning & Stream Parsing                 │
+│         UNIVERSAL BRIDGE SERVER (Node.js/Express)           │
+│              Multi-Language Process Spawning                │
+│  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐      │
+│  │  COBOL   │ │ FORTRAN  │ │  PASCAL  │ │  BASIC   │      │
+│  │  Bridge  │ │  Bridge  │ │  Bridge  │ │  Bridge  │      │
+│  └──────────┘ └──────────┘ └──────────┘ └──────────┘      │
 └────────────────────────┬────────────────────────────────────┘
                          │ child_process.exec()
                          ▼
 ┌─────────────────────────────────────────────────────────────┐
-│              LEGACY ENGINE (COBOL Binary)                   │
-│         Battle-Tested 1960s Business Logic                  │
+│              LEGACY ENGINES (Compiled Binaries)             │
+│  📊 COBOL (1959)  | 🚀 FORTRAN (1957) | 📐 PASCAL (1970)   │
+│                   | 💻 BASIC (1983)                         │
+│         Battle-Tested Vintage Business Logic                │
 └─────────────────────────────────────────────────────────────┘
 ```
 
-**KEY INNOVATION**: The Bridge Server pattern uses process spawning to communicate with compiled COBOL binaries, preserving legacy code in its original form while making it accessible to modern web applications.
+**KEY INNOVATIONS**: 
+1. **Universal Bridge Pattern** - Process spawning communicates with ANY compiled legacy binary
+2. **AI Code Generator** - GPT-4 generates syntactically correct vintage code on demand
+3. **Immersive Museum UI** - Punch cards, tape reels, panel lights, and authentic audio
+4. **Open-Source Toolkit** - Reusable NPM package for legacy modernization
 
 ---
 
@@ -37,7 +48,9 @@ The COBOL Resurrection Bridge is a three-tier architecture that treats legacy CO
 
 ### REQUIRED SOFTWARE
 
-1. **GnuCOBOL** (OpenCOBOL) - COBOL compiler
+1. **Legacy Language Compilers**
+   
+   **COBOL** (GnuCOBOL):
    ```bash
    # macOS
    brew install gnu-cobol
@@ -45,8 +58,44 @@ The COBOL Resurrection Bridge is a three-tier architecture that treats legacy CO
    # Ubuntu/Debian
    sudo apt-get install gnucobol
    
-   # Verify installation
+   # Verify
    cobc --version
+   ```
+   
+   **FORTRAN** (GNU Fortran):
+   ```bash
+   # macOS
+   brew install gcc  # includes gfortran
+   
+   # Ubuntu/Debian
+   sudo apt-get install gfortran
+   
+   # Verify
+   gfortran --version
+   ```
+   
+   **PASCAL** (Free Pascal):
+   ```bash
+   # macOS
+   brew install fpc
+   
+   # Ubuntu/Debian
+   sudo apt-get install fp-compiler
+   
+   # Verify
+   fpc -version
+   ```
+   
+   **BASIC** (FreeBASIC):
+   ```bash
+   # macOS
+   brew install freebasic
+   
+   # Ubuntu/Debian
+   sudo apt-get install freebasic
+   
+   # Verify
+   fbc --version
    ```
 
 2. **Node.js 18+** and npm
@@ -58,30 +107,59 @@ The COBOL Resurrection Bridge is a three-tier architecture that treats legacy CO
 
 3. **Kiro IDE** (Optional - for automation features)
    - Agent hooks for auto-compilation
-   - MCP tools for AI testing
+   - MCP tools for AI code generation
    - Steering persona integration
 
 ---
 
-## 🚀 SETUP INSTRUCTIONS
+## 🚀 QUICK START
 
-### 1. COMPILE THE LEGACY ENGINE
+**NEW TO THE PROJECT?** See [QUICKSTART.md](QUICKSTART.md) for a 5-minute setup guide!
+
+## 📖 DETAILED SETUP INSTRUCTIONS
+
+### 1. COMPILE ALL LEGACY ENGINES
 
 ```bash
 # Navigate to project root
 cd cobol-resurrection-bridge
 
-# Compile COBOL source to executable binary
-cobc -x -o legacy/mortgage legacy/mortgage.cbl
+# Option A: Compile all languages at once
+chmod +x compile-all.sh
+./compile-all.sh
 
-# Test COBOL binary directly
-./legacy/mortgage 200000 5.5 30
-# Expected output: RESULT: 1135.58
+# Option B: Compile individually
+# COBOL
+cd legacy/cobol && ./compile.sh && cd ../..
+
+# FORTRAN
+cd legacy/fortran && ./compile.sh && cd ../..
+
+# PASCAL
+cd legacy/pascal && ./compile.sh && cd ../..
+
+# BASIC
+cd legacy/basic && ./compile.sh && cd ../..
 ```
 
-**COMPILATION FLAGS**:
-- `-x`: Generate executable binary
-- `-o`: Specify output file path
+**TEST EACH BINARY DIRECTLY**:
+```bash
+# COBOL - Mortgage Calculator
+./legacy/cobol/mortgage 200000 5.5 30
+# Expected: RESULT:    1135.58
+
+# FORTRAN - Trajectory Calculator
+./legacy/fortran/trajectory 100 45 9.8
+# Expected: RESULT:    1020.41
+
+# PASCAL - Tax Calculator
+./legacy/pascal/tax 75000 25 50000
+# Expected: RESULT: 6250.00
+
+# BASIC - Compound Interest Calculator
+echo -e "10000\n5\n12\n10" | ./legacy/basic/interest
+# Expected: RESULT: 16470.09
+```
 
 ### 2. INSTALL BRIDGE SERVER DEPENDENCIES
 
@@ -524,18 +602,43 @@ cobc --version
 
 ---
 
-## 📚 ADDITIONAL RESOURCES
+## 📚 DOCUMENTATION
 
-### COBOL RESOURCES
+### PROJECT DOCUMENTATION
+
+- **[ARCHITECTURE.md](ARCHITECTURE.md)** - Comprehensive system architecture and design patterns
+- **[EXAMPLES.md](EXAMPLES.md)** - Detailed examples for all four legacy languages
+- **[CONTRIBUTING.md](CONTRIBUTING.md)** - Guidelines for contributing to the project
+- **[API-DOCUMENTATION.md](server/API-DOCUMENTATION.md)** - Complete API reference
+- **[TOOLKIT README](toolkit/README.md)** - NPM package documentation
+
+### EXTERNAL RESOURCES
+
+**COBOL**:
 - [GnuCOBOL Documentation](https://gnucobol.sourceforge.io/)
 - [COBOL Programming Guide](https://www.ibm.com/docs/en/cobol-zos)
 - [Mortgage Calculation Formula](https://en.wikipedia.org/wiki/Mortgage_calculator)
 
-### BRIDGE PATTERN RESOURCES
+**FORTRAN**:
+- [GNU Fortran Manual](https://gcc.gnu.org/onlinedocs/gfortran/)
+- [FORTRAN 77 Tutorial](https://web.stanford.edu/class/me200c/tutorial_77/)
+- [Projectile Motion Physics](https://en.wikipedia.org/wiki/Projectile_motion)
+
+**PASCAL**:
+- [Free Pascal Documentation](https://www.freepascal.org/docs.html)
+- [Pascal Programming Tutorial](https://www.tutorialspoint.com/pascal/)
+- [Progressive Tax Systems](https://en.wikipedia.org/wiki/Progressive_tax)
+
+**BASIC**:
+- [FreeBASIC Manual](https://www.freebasic.net/wiki/DocToc)
+- [Vintage BASIC Programming](https://www.calormen.com/jsbasic/)
+- [Compound Interest Formula](https://en.wikipedia.org/wiki/Compound_interest)
+
+**BRIDGE PATTERN**:
 - [Legacy System Integration Patterns](https://martinfowler.com/articles/patterns-legacy-displacement.html)
 - [Process Spawning in Node.js](https://nodejs.org/api/child_process.html)
 
-### KIRO RESOURCES
+**KIRO**:
 - [Kiro Agent Hooks Documentation](https://docs.kiro.ai/hooks)
 - [Model Context Protocol (MCP)](https://modelcontextprotocol.io/)
 - [Kiro Steering Files](https://docs.kiro.ai/steering)
@@ -544,18 +647,35 @@ cobc --version
 
 ## 🎯 PROJECT GOALS ACHIEVED
 
-✅ **Resurrect genuine COBOL code** in modern environment  
-✅ **Bridge legacy to contemporary** web technologies  
-✅ **Demonstrate property-based testing** for correctness  
-✅ **Integrate Kiro automation** (hooks, MCP, steering)  
-✅ **Create immersive "cyber-necromancy"** experience  
-✅ **Prove legacy systems** can coexist with modern infrastructure  
+✅ **Resurrect FOUR vintage languages** (COBOL, FORTRAN, PASCAL, BASIC)  
+✅ **Universal bridge pattern** for any legacy system  
+✅ **AI-powered code generator** using GPT-4  
+✅ **Immersive mainframe museum** UI with authentic components  
+✅ **Property-based testing** for correctness guarantees  
+✅ **Kiro automation** (hooks, MCP, steering)  
+✅ **Open-source toolkit** for community use  
+✅ **Comprehensive documentation** and examples  
+
+---
+
+## 🤝 CONTRIBUTING
+
+WE WELCOME CONTRIBUTIONS! SEE [CONTRIBUTING.md](CONTRIBUTING.md) FOR GUIDELINES.
+
+**WAYS TO CONTRIBUTE**:
+- Add support for new legacy languages (Ada, PL/I, RPG, Algol)
+- Improve UI components and animations
+- Enhance AI code generation capabilities
+- Write additional tests and documentation
+- Report bugs and suggest features
 
 ---
 
 ## 📜 LICENSE
 
 MIT License - Feel free to resurrect your own legacy systems!
+
+See [LICENSE](LICENSE) file for details.
 
 ---
 
@@ -564,10 +684,22 @@ MIT License - Feel free to resurrect your own legacy systems!
 Built for the Kiro Hackathon 2024.
 
 **SPECIAL THANKS TO**:
-- Grace Hopper, for debugging the first "moth" in 1947
-- The COBOL standards committee, for creating an enduring language
-- The GnuCOBOL team, for keeping COBOL alive in the open-source era
-- Every mainframe operator who kept the tape drives spinning
+- **Grace Hopper**, for debugging the first "moth" in 1947
+- **The COBOL Standards Committee**, for creating an enduring language
+- **The GnuCOBOL Team**, for keeping COBOL alive in the open-source era
+- **GNU Fortran Developers**, for maintaining gfortran
+- **Free Pascal Community**, for the excellent compiler
+- **FreeBASIC Team**, for preserving BASIC heritage
+- **Every mainframe operator** who kept the tape drives spinning
+- **Kiro Team**, for creating an amazing AI-powered IDE
+
+---
+
+## 🌟 STAR HISTORY
+
+IF YOU FIND THIS PROJECT USEFUL, PLEASE CONSIDER GIVING IT A STAR ON GITHUB!
+
+[![Star History Chart](https://api.star-history.com/svg?repos=YOUR-USERNAME/cobol-resurrection-bridge&type=Date)](https://star-history.com/#YOUR-USERNAME/cobol-resurrection-bridge&Date)
 
 ---
 

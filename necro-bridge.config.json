@@ -1,0 +1,195 @@
+{
+  "project": {
+    "name": "necro-bridge-project",
+    "version": "1.0.0",
+    "description": "Legacy system integration via Necro-Bridge",
+    "languages": [
+      "basic",
+      "cobol",
+      "fortran",
+      "pascal"
+    ]
+  },
+  "binaries": [
+    {
+      "name": "compile.sh",
+      "path": "legacy/basic/compile.sh",
+      "language": "basic",
+      "endpoint": "/api/calculate/basic/compile.sh",
+      "parameters": [
+        "principal",
+        "rate",
+        "time"
+      ],
+      "outputPattern": "RESULT:\\s*([\\d.]+)",
+      "timeout": 5000
+    },
+    {
+      "name": "interest",
+      "path": "legacy/basic/interest",
+      "language": "basic",
+      "endpoint": "/api/calculate/basic/interest",
+      "parameters": [
+        "principal",
+        "rate",
+        "time"
+      ],
+      "outputPattern": "RESULT:\\s*([\\d.]+)",
+      "timeout": 5000
+    },
+    {
+      "name": "addition",
+      "path": "legacy/cobol/addition",
+      "language": "cobol",
+      "endpoint": "/api/calculate/cobol/addition",
+      "parameters": [
+        "principal",
+        "rate",
+        "term"
+      ],
+      "outputPattern": "RESULT:\\s*([\\d.]+)",
+      "timeout": 5000
+    },
+    {
+      "name": "compile.sh",
+      "path": "legacy/cobol/compile.sh",
+      "language": "cobol",
+      "endpoint": "/api/calculate/cobol/compile.sh",
+      "parameters": [
+        "principal",
+        "rate",
+        "term"
+      ],
+      "outputPattern": "RESULT:\\s*([\\d.]+)",
+      "timeout": 5000
+    },
+    {
+      "name": "mortgage",
+      "path": "legacy/cobol/mortgage",
+      "language": "cobol",
+      "endpoint": "/api/calculate/cobol/mortgage",
+      "parameters": [
+        "principal",
+        "rate",
+        "term"
+      ],
+      "outputPattern": "RESULT:\\s*([\\d.]+)",
+      "timeout": 5000
+    },
+    {
+      "name": "test-broken",
+      "path": "legacy/cobol/test-broken",
+      "language": "cobol",
+      "endpoint": "/api/calculate/cobol/test-broken",
+      "parameters": [
+        "principal",
+        "rate",
+        "term"
+      ],
+      "outputPattern": "RESULT:\\s*([\\d.]+)",
+      "timeout": 5000
+    },
+    {
+      "name": "workflow-test",
+      "path": "legacy/cobol/workflow-test",
+      "language": "cobol",
+      "endpoint": "/api/calculate/cobol/workflow-test",
+      "parameters": [
+        "principal",
+        "rate",
+        "term"
+      ],
+      "outputPattern": "RESULT:\\s*([\\d.]+)",
+      "timeout": 5000
+    },
+    {
+      "name": "compile.sh",
+      "path": "legacy/fortran/compile.sh",
+      "language": "fortran",
+      "endpoint": "/api/calculate/fortran/compile.sh",
+      "parameters": [
+        "velocity",
+        "angle",
+        "gravity"
+      ],
+      "outputPattern": "RESULT:\\s*([\\d.]+)",
+      "timeout": 5000
+    },
+    {
+      "name": "multiply",
+      "path": "legacy/fortran/multiply",
+      "language": "fortran",
+      "endpoint": "/api/calculate/fortran/multiply",
+      "parameters": [
+        "velocity",
+        "angle",
+        "gravity"
+      ],
+      "outputPattern": "RESULT:\\s*([\\d.]+)",
+      "timeout": 5000
+    },
+    {
+      "name": "trajectory",
+      "path": "legacy/fortran/trajectory",
+      "language": "fortran",
+      "endpoint": "/api/calculate/fortran/trajectory",
+      "parameters": [
+        "velocity",
+        "angle",
+        "gravity"
+      ],
+      "outputPattern": "RESULT:\\s*([\\d.]+)",
+      "timeout": 5000
+    },
+    {
+      "name": "compile.sh",
+      "path": "legacy/pascal/compile.sh",
+      "language": "pascal",
+      "endpoint": "/api/calculate/pascal/compile.sh",
+      "parameters": [
+        "income",
+        "deductions",
+        "rate"
+      ],
+      "outputPattern": "RESULT:\\s*([\\d.]+)",
+      "timeout": 5000
+    },
+    {
+      "name": "subtract",
+      "path": "legacy/pascal/subtract",
+      "language": "pascal",
+      "endpoint": "/api/calculate/pascal/subtract",
+      "parameters": [
+        "income",
+        "deductions",
+        "rate"
+      ],
+      "outputPattern": "RESULT:\\s*([\\d.]+)",
+      "timeout": 5000
+    },
+    {
+      "name": "tax",
+      "path": "legacy/pascal/tax",
+      "language": "pascal",
+      "endpoint": "/api/calculate/pascal/tax",
+      "parameters": [
+        "income",
+        "deductions",
+        "rate"
+      ],
+      "outputPattern": "RESULT:\\s*([\\d.]+)",
+      "timeout": 5000
+    }
+  ],
+  "server": {
+    "port": 3001,
+    "timeout": 5000,
+    "cors": true,
+    "logging": true
+  },
+  "paths": {
+    "legacy": "./legacy",
+    "server": "./server",
+    "bridges": "./server/bridges"
+  }
+}

@@ -14,6 +14,7 @@ import { initCommand } from './commands/init';
 import { detectCommand } from './commands/detect';
 import { serveCommand } from './commands/serve';
 import { testCommand } from './commands/test';
+import { setupCommand } from './commands/setup';
 
 const program = new Command();
 
@@ -21,6 +22,12 @@ program
   .name('necro-bridge')
   .description('🏛️  Universal Bridge Pattern Framework for Legacy System Modernization')
   .version('1.0.0');
+
+// SETUP COMMAND - INTERACTIVE SETUP WIZARD FOR FIRST-TIME USERS
+program
+  .command('setup')
+  .description('Interactive setup wizard for first-time users')
+  .action(setupCommand);
 
 // INIT COMMAND - INITIALIZE BRIDGE FOR LEGACY LANGUAGE
 program
