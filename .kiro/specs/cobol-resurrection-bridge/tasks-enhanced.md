@@ -138,7 +138,7 @@
   - Sync with calculation execution
   - _Requirements: 11.3_
 
-- [ ] 19. Implement Core Memory Dump component
+- [x] 19. Implement Core Memory Dump component
   - Create MemoryDump.tsx for error visualization
   - Display hexadecimal memory in 16-byte rows
   - Add color coding: code (green), data (yellow), stack (red)
@@ -146,7 +146,7 @@
   - Trigger on error responses from bridge server
   - _Requirements: 11.4_
 
-- [ ] 20. Implement Sound Effects system
+- [x] 20. Implement Sound Effects system
   - Create AudioManager.ts service
   - Add sound files: teletype, tape drive, card reader, bell, buzzer
   - Implement sound triggering on UI events
@@ -162,7 +162,7 @@
   - Show which language processed each result
   - _Requirements: 9.4, 13.3_
 
-- [ ] 22. Implement enhanced Terminal Window
+- [x] 22. Implement enhanced Terminal Window
   - Upgrade terminal with CRT phosphor glow effect
   - Add scanline overlay for authentic CRT look
   - Implement typewriter effect for messages
@@ -172,14 +172,14 @@
 
 ## PHASE 5: LEGACY MODERNIZATION TOOLKIT (PRACTICAL VALUE)
 
-- [ ] 23. Create NPM package structure
+- [x] 23. Create NPM package structure
   - Initialize @necro-bridge/core package
   - Set up TypeScript configuration
   - Create package.json with proper metadata
   - Add MIT license and README
   - _Requirements: 12.1, 12.5_
 
-- [ ] 24. Implement CLI tool
+- [x] 24. Implement CLI tool
   - Create bin/necro-bridge.js executable
   - Implement init command with language templates
   - Implement detect command for binary auto-detection

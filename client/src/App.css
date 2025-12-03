@@ -40,3 +40,13 @@
 .read-the-docs {
   color: #888;
 }
+
+/* CRT SCANLINE ANIMATION FOR AUTHENTIC MAINFRAME TERMINAL EFFECT */
+@keyframes scanline {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(100%);
+  }
+}
