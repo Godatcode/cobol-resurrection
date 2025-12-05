@@ -540,7 +540,7 @@ WE WELCOME CONTRIBUTIONS! SEE [CONTRIBUTING.md](CONTRIBUTING.md) FOR GUIDELINES.
 
 MIT License - Feel free to resurrect your own legacy systems!
 
-See [LICENSE](LICENSE) file for details.
+See [LICENSE](https://github.com/Godatcode/cobol-resurrection/blob/main/LICENSE) file for details.
 
 ---
 
