@@ -6,7 +6,10 @@ import CodeGeneratorModal from './components/CodeGeneratorModal'
 import TapeReel from './components/TapeReel'
 import PanelLights from './components/PanelLights'
 import MemoryDump from './components/MemoryDump'
+import BootSequence from './components/BootSequence'
+import DemoMode from './components/DemoMode'
 import { VolumeControl } from './components/VolumeControl'
+import { ArchitectureVisualization } from './components/ArchitectureVisualization'
 import { audioManager } from './services/AudioManager'
 import './App.css'
 
@@ -24,11 +27,32 @@ function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [errorData, setErrorData] = useState(null);
   const [showMemoryDump, setShowMemoryDump] = useState(false);
+  const [showBootSequence, setShowBootSequence] = useState(true);
+  const [systemReady, setSystemReady] = useState(false);
+  const [isDemoMode, setIsDemoMode] = useState(false);
+  const [showArchitecture, setShowArchitecture] = useState(false);
 
   // Initialize audio manager on mount
   useEffect(() => {
     audioManager.initialize().catch(console.error);
   }, []);
+
+  // CHECK FOR DEMO MODE IN URL
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('demo') === 'true') {
+      // START DEMO MODE AFTER BOOT SEQUENCE
+      const timer = setTimeout(() => {
+        setIsDemoMode(true);
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, []);
+
+  const handleBootComplete = () => {
+    setShowBootSequence(false);
+    setSystemReady(true);
+  };
 
   const formatTimestamp = () => {
     const now = new Date();
@@ -111,11 +135,35 @@ function App() {
 
   return (
     <div className="min-h-screen bg-mainframe-black">
-      <Header />
+      {/* VINTAGE IBM BOOT SEQUENCE */}
+      {showBootSequence && <BootSequence onComplete={handleBootComplete} />}
+      
+      <div id="header">
+        <Header />
+      </div>
+      
+      {/* DEMO MODE TOGGLE BUTTON */}
+      {systemReady && !isDemoMode && (
+        <div className="fixed top-4 left-4 z-30 flex flex-col gap-2">
+          <button
+            onClick={() => setIsDemoMode(true)}
+            className="bg-black border-2 border-mainframe-green text-mainframe-green font-mono py-2 px-4 hover:bg-mainframe-green hover:text-black transition-colors text-sm"
+          >
+            🎯 START GUIDED TOUR
+          </button>
+          <button
+            onClick={() => setShowArchitecture(true)}
+            className="bg-black border-2 border-mainframe-green text-mainframe-green font-mono py-2 px-4 hover:bg-mainframe-green hover:text-black transition-colors text-sm"
+          >
+            🏛️ VIEW ARCHITECTURE
+          </button>
+        </div>
+      )}
       
       {/* SUMMON ANCIENT SPIRIT BUTTON */}
       <div className="max-w-4xl mx-auto px-6 pt-6">
         <button
+          id="code-generator-button"
           onClick={() => setIsModalOpen(true)}
           className="w-full bg-black border-2 border-mainframe-green text-mainframe-green font-mono py-3 px-6 hover:bg-mainframe-green hover:text-black transition-colors mb-6"
         >
@@ -130,17 +178,21 @@ function App() {
       />
       
       {/* IBM 729 TAPE DRIVE VISUALIZATION */}
-      <TapeReel isCalculating={isCalculating} />
+      <div id="tape-reel">
+        <TapeReel isCalculating={isCalculating} />
+      </div>
       
       {/* IBM 7090 CONSOLE PANEL LIGHTS */}
-      <div className="max-w-4xl mx-auto px-6 py-6">
+      <div id="panel-lights" className="max-w-4xl mx-auto px-6 py-6">
         <PanelLights isCalculating={isCalculating} />
       </div>
       
       {/* CORE MEMORY DUMP (SHOWN ON ERROR) */}
       <MemoryDump errorData={errorData} isVisible={showMemoryDump} />
       
-      <TerminalWindow logs={logs} isCalculating={isCalculating} />
+      <div id="terminal">
+        <TerminalWindow logs={logs} isCalculating={isCalculating} />
+      </div>
       
       {/* CODE GENERATOR MODAL */}
       <CodeGeneratorModal
@@ -150,7 +202,24 @@ function App() {
       />
       
       {/* VOLUME CONTROL */}
-      <VolumeControl />
+      <div id="volume-control">
+        <VolumeControl />
+      </div>
+
+      {/* DEMO MODE */}
+      <DemoMode 
+        isActive={isDemoMode}
+        onClose={() => setIsDemoMode(false)}
+        onAutoPlayComplete={() => {
+          addLog('GUIDED TOUR COMPLETE. TRY IT YOURSELF!', 'info');
+        }}
+      />
+
+      {/* ARCHITECTURE VISUALIZATION */}
+      <ArchitectureVisualization
+        isVisible={showArchitecture}
+        onClose={() => setShowArchitecture(false)}
+      />
     </div>
   )
 }

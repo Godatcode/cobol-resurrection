@@ -210,7 +210,7 @@
   - Write contributing guidelines
   - _Requirements: 12.5_
 
-- [ ] 28. Publish to NPM (optional for demo)
+- [x] 28. Publish to NPM (optional for demo)
   - Test package installation locally
   - Create npm account if needed
   - Publish @necro-bridge/core to registry
@@ -219,7 +219,7 @@
 
 ## PHASE 6: DEMO EXPERIENCE & POLISH
 
-- [ ] 29. Create boot sequence animation
+- [x] 29. Create boot sequence animation
   - Implement vintage IBM boot screen
   - Add "INITIALIZING NECRO-BRIDGE v1.0" message
   - Create sequential startup messages
@@ -227,7 +227,7 @@
   - Make skippable after first view
   - _Requirements: 13.1_
 
-- [ ] 30. Implement demo mode
+- [x] 30. Implement demo mode
   - Create guided tour feature
   - Add tooltips explaining each component
   - Implement auto-play demo sequence
@@ -235,7 +235,7 @@
   - Create shareable demo link
   - _Requirements: 13.2, 13.3_
 
-- [ ] 31. Create architecture visualization
+- [x] 31. Create architecture visualization
   - Build interactive architecture diagram
   - Add animated data flow visualization
   - Highlight Kiro integration points

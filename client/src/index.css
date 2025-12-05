@@ -1,6 +1,47 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@theme {
+  --color-mainframe-black: #000000;
+  --color-mainframe-green: #00ff00;
+  --color-mainframe-amber: #ffb000;
+  --color-mainframe-red: #ff0000;
+  
+  --color-ibm-blue: #0f62fe;
+  --color-ibm-cyan: #00d4ff;
+  --color-ibm-teal: #009d9a;
+  --color-ibm-green: #24a148;
+  --color-ibm-yellow: #f1c21b;
+  --color-ibm-orange: #ff832b;
+  --color-ibm-red: #da1e28;
+  --color-ibm-magenta: #ee5396;
+  --color-ibm-purple: #8a3ffc;
+  
+  --color-phosphor-green: #33ff33;
+  --color-phosphor-amber: #ffaa00;
+  --color-phosphor-white: #f0f0f0;
+  
+  --color-panel-gray: #2a2a2a;
+  --color-console-beige: #d4c5a9;
+  --color-tape-brown: #8b4513;
+  
+  --font-family-mono: 'Courier New', monospace;
+  --font-family-ibm: 'IBM Plex Mono', 'Courier New', monospace;
+}
+
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+@keyframes flicker {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.8; }
+}
+
+@keyframes scanline {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(100%); }
+}
 
 body {
   margin: 0;

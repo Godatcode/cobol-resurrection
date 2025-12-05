@@ -143,10 +143,10 @@ function MortgageForm({ onCalculationStart, onCalculationComplete, onCalculation
     <div className="max-w-4xl mx-auto p-6">
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* MAIN CALCULATOR FORM - 2/3 WIDTH */}
-        <div className="lg:col-span-2">
+        <div id="calculator-form" className="lg:col-span-2">
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* LANGUAGE SELECTOR */}
-            <div>
+            <div id="language-selector">
               <label 
                 htmlFor="language" 
                 className="block text-mainframe-green font-mono text-sm mb-2"
@@ -204,7 +204,7 @@ function MortgageForm({ onCalculationStart, onCalculationComplete, onCalculation
         </div>
 
         {/* CALCULATION HISTORY PANEL - 1/3 WIDTH */}
-        <div className="lg:col-span-1">
+        <div id="history-panel" className="lg:col-span-1">
           <div className="border-2 border-mainframe-green bg-black p-4">
             <h3 className="text-mainframe-green font-mono text-sm mb-4 border-b border-mainframe-green pb-2">
               CALCULATION HISTORY
