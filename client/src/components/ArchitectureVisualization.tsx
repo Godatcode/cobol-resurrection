@@ -33,29 +33,101 @@ export const ArchitectureVisualization: React.FC<ArchitectureVisualizationProps>
     }, 4000);
   };
 
-  const exportDiagram = () => {
+  const exportDiagram = async () => {
     const svg = document.getElementById('architecture-svg');
-    if (!svg) return;
+    if (!svg) {
+      console.error('SVG element not found');
+      return;
+    }
 
-    const svgData = new XMLSerializer().serializeToString(svg);
-    const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d');
-    const img = new Image();
-
-    canvas.width = 1200;
-    canvas.height = 800;
-
-    img.onload = () => {
-      ctx?.drawImage(img, 0, 0);
-      const pngFile = canvas.toDataURL('image/png');
+    try {
+      // Clone the SVG to avoid modifying the original
+      const svgClone = svg.cloneNode(true) as SVGElement;
       
-      const downloadLink = document.createElement('a');
-      downloadLink.download = 'necro-bridge-architecture.png';
-      downloadLink.href = pngFile;
-      downloadLink.click();
-    };
-
-    img.src = 'data:image/svg+xml;base64,' + btoa(svgData);
+      // Get SVG dimensions
+      const bbox = svg.getBoundingClientRect();
+      const width = 1400;
+      const height = 800;
+      
+      // Serialize SVG to string
+      const svgData = new XMLSerializer().serializeToString(svgClone);
+      
+      // Create blob from SVG data
+      const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
+      const url = URL.createObjectURL(svgBlob);
+      
+      // Create canvas for conversion
+      const canvas = document.createElement('canvas');
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext('2d');
+      
+      if (!ctx) {
+        console.error('Canvas context not available');
+        return;
+      }
+      
+      // Fill background with black
+      ctx.fillStyle = '#000000';
+      ctx.fillRect(0, 0, width, height);
+      
+      // Load and draw SVG
+      const img = new Image();
+      
+      img.onload = () => {
+        try {
+          ctx.drawImage(img, 0, 0, width, height);
+          
+          // Convert to PNG
+          canvas.toBlob((blob) => {
+            if (blob) {
+              const pngUrl = URL.createObjectURL(blob);
+              const downloadLink = document.createElement('a');
+              downloadLink.download = `necro-bridge-architecture-${Date.now()}.png`;
+              downloadLink.href = pngUrl;
+              downloadLink.click();
+              
+              // Cleanup
+              URL.revokeObjectURL(pngUrl);
+              URL.revokeObjectURL(url);
+            }
+          }, 'image/png');
+        } catch (error) {
+          console.error('Error converting to PNG:', error);
+          // Fallback: download SVG directly
+          downloadSVGFallback(svgData);
+        }
+      };
+      
+      img.onerror = () => {
+        console.error('Error loading SVG image');
+        // Fallback: download SVG directly
+        downloadSVGFallback(svgData);
+      };
+      
+      img.src = url;
+      
+    } catch (error) {
+      console.error('Error exporting diagram:', error);
+      // Fallback: download SVG directly
+      const svg = document.getElementById('architecture-svg');
+      if (svg) {
+        const svgData = new XMLSerializer().serializeToString(svg);
+        downloadSVGFallback(svgData);
+      }
+    }
+  };
+  
+  const downloadSVGFallback = (svgData: string) => {
+    // Fallback: download as SVG file
+    const blob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const downloadLink = document.createElement('a');
+    downloadLink.download = `necro-bridge-architecture-${Date.now()}.svg`;
+    downloadLink.href = url;
+    downloadLink.click();
+    URL.revokeObjectURL(url);
+    console.log('Exported as SVG (PNG conversion failed)');
   };
 
   if (!isVisible) return null;
@@ -122,15 +194,45 @@ export const ArchitectureVisualization: React.FC<ArchitectureVisualizationProps>
         <div className="p-8">
           <svg
             id="architecture-svg"
-            viewBox="0 0 1200 800"
+            viewBox="0 0 1400 800"
             className="w-full h-auto"
             xmlns="http://www.w3.org/2000/svg"
           >
             {/* BACKGROUND */}
-            <rect width="1200" height="800" fill="#000000" />
+            <rect width="1400" height="800" fill="#000000" />
+            
+            {/* GLOW FILTERS FOR HIGHLIGHTING */}
+            <defs>
+              <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+                <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+                <feMerge>
+                  <feMergeNode in="coloredBlur"/>
+                  <feMergeNode in="SourceGraphic"/>
+                </feMerge>
+              </filter>
+              <filter id="strong-glow" x="-50%" y="-50%" width="200%" height="200%">
+                <feGaussianBlur stdDeviation="8" result="coloredBlur"/>
+                <feMerge>
+                  <feMergeNode in="coloredBlur"/>
+                  <feMergeNode in="SourceGraphic"/>
+                </feMerge>
+              </filter>
+            </defs>
 
             {/* LAYER 1: NECRO-BANK UI */}
             <g id="ui-layer">
+              {/* HIGHLIGHT BACKGROUND */}
+              {(animationPhase === 'ui-to-server' || animationPhase === 'server-to-ui') && (
+                <rect
+                  x="45"
+                  y="45"
+                  width="310"
+                  height="210"
+                  fill={currentLang.color}
+                  opacity="0.15"
+                  filter="url(#strong-glow)"
+                />
+              )}
               <rect
                 x="50"
                 y="50"
@@ -138,10 +240,10 @@ export const ArchitectureVisualization: React.FC<ArchitectureVisualizationProps>
                 height="200"
                 fill="none"
                 stroke={animationPhase === 'ui-to-server' || animationPhase === 'server-to-ui' ? currentLang.color : '#00ff00'}
-                strokeWidth="3"
-                className={animationPhase === 'ui-to-server' || animationPhase === 'server-to-ui' ? 'animate-pulse' : ''}
+                strokeWidth={animationPhase === 'ui-to-server' || animationPhase === 'server-to-ui' ? '5' : '3'}
+                filter={animationPhase === 'ui-to-server' || animationPhase === 'server-to-ui' ? 'url(#glow)' : ''}
               />
-              <text x="200" y="80" textAnchor="middle" fill="#00ff00" fontSize="20" fontFamily="monospace" fontWeight="bold">
+              <text x="200" y="80" textAnchor="middle" fill={animationPhase === 'ui-to-server' || animationPhase === 'server-to-ui' ? currentLang.color : '#00ff00'} fontSize="20" fontFamily="monospace" fontWeight="bold">
                 NECRO-BANK UI
               </text>
               <text x="200" y="110" textAnchor="middle" fill="#00ff00" fontSize="14" fontFamily="monospace">
@@ -158,64 +260,88 @@ export const ArchitectureVisualization: React.FC<ArchitectureVisualizationProps>
 
             {/* LAYER 2: BRIDGE SERVER */}
             <g id="server-layer">
+              {/* HIGHLIGHT BACKGROUND */}
+              {(animationPhase === 'server-to-legacy' || animationPhase === 'legacy-to-server' || animationPhase === 'ui-to-server' || animationPhase === 'server-to-ui') && (
+                <rect
+                  x="495"
+                  y="45"
+                  width="310"
+                  height="210"
+                  fill={currentLang.color}
+                  opacity="0.15"
+                  filter="url(#strong-glow)"
+                />
+              )}
               <rect
-                x="450"
+                x="500"
                 y="50"
                 width="300"
                 height="200"
                 fill="none"
-                stroke={animationPhase === 'server-to-legacy' || animationPhase === 'legacy-to-server' ? currentLang.color : '#00ff00'}
-                strokeWidth="3"
-                className={animationPhase === 'server-to-legacy' || animationPhase === 'legacy-to-server' ? 'animate-pulse' : ''}
+                stroke={animationPhase === 'server-to-legacy' || animationPhase === 'legacy-to-server' || animationPhase === 'ui-to-server' || animationPhase === 'server-to-ui' ? currentLang.color : '#00ff00'}
+                strokeWidth={animationPhase === 'server-to-legacy' || animationPhase === 'legacy-to-server' || animationPhase === 'ui-to-server' || animationPhase === 'server-to-ui' ? '5' : '3'}
+                filter={animationPhase === 'server-to-legacy' || animationPhase === 'legacy-to-server' || animationPhase === 'ui-to-server' || animationPhase === 'server-to-ui' ? 'url(#glow)' : ''}
               />
-              <text x="600" y="80" textAnchor="middle" fill="#00ff00" fontSize="20" fontFamily="monospace" fontWeight="bold">
+              <text x="650" y="80" textAnchor="middle" fill={animationPhase === 'server-to-legacy' || animationPhase === 'legacy-to-server' || animationPhase === 'ui-to-server' || animationPhase === 'server-to-ui' ? currentLang.color : '#00ff00'} fontSize="20" fontFamily="monospace" fontWeight="bold">
                 BRIDGE SERVER
               </text>
-              <text x="600" y="110" textAnchor="middle" fill="#00ff00" fontSize="14" fontFamily="monospace">
+              <text x="650" y="110" textAnchor="middle" fill="#00ff00" fontSize="14" fontFamily="monospace">
                 Node.js + Express
               </text>
               
               {/* SERVER COMPONENTS */}
-              <text x="470" y="140" fill="#00ff00" fontSize="12" fontFamily="monospace">• BridgeFactory</text>
-              <text x="470" y="160" fill="#00ff00" fontSize="12" fontFamily="monospace">• CobolBridge</text>
-              <text x="470" y="180" fill="#00ff00" fontSize="12" fontFamily="monospace">• FortranBridge</text>
-              <text x="470" y="200" fill="#00ff00" fontSize="12" fontFamily="monospace">• PascalBridge</text>
-              <text x="470" y="220" fill="#00ff00" fontSize="12" fontFamily="monospace">• BasicBridge</text>
+              <text x="520" y="140" fill="#00ff00" fontSize="12" fontFamily="monospace">• BridgeFactory</text>
+              <text x="520" y="160" fill="#00ff00" fontSize="12" fontFamily="monospace">• CobolBridge</text>
+              <text x="520" y="180" fill="#00ff00" fontSize="12" fontFamily="monospace">• FortranBridge</text>
+              <text x="520" y="200" fill="#00ff00" fontSize="12" fontFamily="monospace">• PascalBridge</text>
+              <text x="520" y="220" fill="#00ff00" fontSize="12" fontFamily="monospace">• BasicBridge</text>
             </g>
 
             {/* LAYER 3: LEGACY ENGINES */}
             <g id="legacy-layer">
+              {/* HIGHLIGHT BACKGROUND */}
+              {(animationPhase === 'legacy-processing' || animationPhase === 'server-to-legacy' || animationPhase === 'legacy-to-server') && (
+                <rect
+                  x="995"
+                  y="45"
+                  width="310"
+                  height="210"
+                  fill={currentLang.color}
+                  opacity="0.15"
+                  filter="url(#strong-glow)"
+                />
+              )}
               <rect
-                x="850"
+                x="1000"
                 y="50"
                 width="300"
                 height="200"
                 fill="none"
-                stroke={animationPhase === 'legacy-processing' ? currentLang.color : '#00ff00'}
-                strokeWidth="3"
-                className={animationPhase === 'legacy-processing' ? 'animate-pulse' : ''}
+                stroke={animationPhase === 'legacy-processing' || animationPhase === 'server-to-legacy' || animationPhase === 'legacy-to-server' ? currentLang.color : '#00ff00'}
+                strokeWidth={animationPhase === 'legacy-processing' || animationPhase === 'server-to-legacy' || animationPhase === 'legacy-to-server' ? '5' : '3'}
+                filter={animationPhase === 'legacy-processing' || animationPhase === 'server-to-legacy' || animationPhase === 'legacy-to-server' ? 'url(#glow)' : ''}
               />
-              <text x="1000" y="80" textAnchor="middle" fill={currentLang.color} fontSize="20" fontFamily="monospace" fontWeight="bold">
+              <text x="1150" y="80" textAnchor="middle" fill={animationPhase === 'legacy-processing' || animationPhase === 'server-to-legacy' || animationPhase === 'legacy-to-server' ? currentLang.color : currentLang.color} fontSize="20" fontFamily="monospace" fontWeight="bold">
                 {currentLang.name} ENGINE
               </text>
-              <text x="1000" y="110" textAnchor="middle" fill={currentLang.color} fontSize="14" fontFamily="monospace">
+              <text x="1150" y="110" textAnchor="middle" fill={currentLang.color} fontSize="14" fontFamily="monospace">
                 Vintage {currentLang.year}
               </text>
               
               {/* LEGACY COMPONENTS */}
-              <text x="870" y="140" fill={currentLang.color} fontSize="12" fontFamily="monospace">
+              <text x="1020" y="140" fill={currentLang.color} fontSize="12" fontFamily="monospace">
                 {selectedLanguage === 'cobol' && '• mortgage.cbl'}
                 {selectedLanguage === 'fortran' && '• trajectory.f'}
                 {selectedLanguage === 'pascal' && '• tax.pas'}
                 {selectedLanguage === 'basic' && '• interest.bas'}
               </text>
-              <text x="870" y="160" fill={currentLang.color} fontSize="12" fontFamily="monospace">• Argument Parser</text>
-              <text x="870" y="180" fill={currentLang.color} fontSize="12" fontFamily="monospace">• Calculator Logic</text>
-              <text x="870" y="200" fill={currentLang.color} fontSize="12" fontFamily="monospace">• STDOUT Writer</text>
-              <text x="870" y="220" fill={currentLang.color} fontSize="12" fontFamily="monospace">• Error Handler</text>
+              <text x="1020" y="160" fill={currentLang.color} fontSize="12" fontFamily="monospace">• Argument Parser</text>
+              <text x="1020" y="180" fill={currentLang.color} fontSize="12" fontFamily="monospace">• Calculator Logic</text>
+              <text x="1020" y="200" fill={currentLang.color} fontSize="12" fontFamily="monospace">• STDOUT Writer</text>
+              <text x="1020" y="220" fill={currentLang.color} fontSize="12" fontFamily="monospace">• Error Handler</text>
             </g>
 
-            {/* DATA FLOW ARROWS */}
+            {/* DATA FLOW ARROWS - WITH INCREASED SPACING */}
             {/* UI TO SERVER */}
             <g id="arrow-ui-to-server">
               <defs>
@@ -225,15 +351,17 @@ export const ArchitectureVisualization: React.FC<ArchitectureVisualizationProps>
               </defs>
               <line
                 x1="350"
-                y1="150"
-                x2="450"
-                y2="150"
+                y1="100"
+                x2="500"
+                y2="100"
                 stroke={animationPhase === 'ui-to-server' ? currentLang.color : '#00ff00'}
-                strokeWidth="2"
+                strokeWidth={animationPhase === 'ui-to-server' ? '4' : '2'}
                 markerEnd="url(#arrowhead-right)"
-                className={animationPhase === 'ui-to-server' ? 'animate-pulse' : ''}
+                filter={animationPhase === 'ui-to-server' ? 'url(#glow)' : ''}
               />
-              <text x="400" y="140" textAnchor="middle" fill="#00ff00" fontSize="11" fontFamily="monospace">
+              {/* TEXT WITH BACKGROUND FOR BETTER VISIBILITY */}
+              <rect x="385" y="75" width="105" height="20" fill="#000000" opacity="0.9" />
+              <text x="437" y="90" textAnchor="middle" fill={animationPhase === 'ui-to-server' ? currentLang.color : '#00ff00'} fontSize="11" fontFamily="monospace" fontWeight="bold">
                 POST /api/calculate
               </text>
             </g>
@@ -246,16 +374,18 @@ export const ArchitectureVisualization: React.FC<ArchitectureVisualizationProps>
                 </marker>
               </defs>
               <line
-                x1="750"
-                y1="150"
-                x2="850"
-                y2="150"
+                x1="800"
+                y1="100"
+                x2="1000"
+                y2="100"
                 stroke={animationPhase === 'server-to-legacy' ? currentLang.color : '#00ff00'}
-                strokeWidth="2"
+                strokeWidth={animationPhase === 'server-to-legacy' ? '4' : '2'}
                 markerEnd="url(#arrowhead-right-2)"
-                className={animationPhase === 'server-to-legacy' ? 'animate-pulse' : ''}
+                filter={animationPhase === 'server-to-legacy' ? 'url(#glow)' : ''}
               />
-              <text x="800" y="140" textAnchor="middle" fill="#00ff00" fontSize="11" fontFamily="monospace">
+              {/* TEXT WITH BACKGROUND */}
+              <rect x="855" y="75" width="90" height="20" fill="#000000" opacity="0.9" />
+              <text x="900" y="90" textAnchor="middle" fill={animationPhase === 'server-to-legacy' ? currentLang.color : '#00ff00'} fontSize="11" fontFamily="monospace" fontWeight="bold">
                 exec(binary)
               </text>
             </g>
@@ -268,16 +398,18 @@ export const ArchitectureVisualization: React.FC<ArchitectureVisualizationProps>
                 </marker>
               </defs>
               <line
-                x1="850"
-                y1="180"
-                x2="750"
-                y2="180"
+                x1="1000"
+                y1="210"
+                x2="800"
+                y2="210"
                 stroke={animationPhase === 'legacy-to-server' ? currentLang.color : '#00ff00'}
-                strokeWidth="2"
+                strokeWidth={animationPhase === 'legacy-to-server' ? '4' : '2'}
                 markerEnd="url(#arrowhead-left)"
-                className={animationPhase === 'legacy-to-server' ? 'animate-pulse' : ''}
+                filter={animationPhase === 'legacy-to-server' ? 'url(#glow)' : ''}
               />
-              <text x="800" y="200" textAnchor="middle" fill="#00ff00" fontSize="11" fontFamily="monospace">
+              {/* TEXT WITH BACKGROUND */}
+              <rect x="855" y="220" width="90" height="20" fill="#000000" opacity="0.9" />
+              <text x="900" y="235" textAnchor="middle" fill={animationPhase === 'legacy-to-server' ? currentLang.color : '#00ff00'} fontSize="11" fontFamily="monospace" fontWeight="bold">
                 RESULT: XX.XX
               </text>
             </g>
@@ -290,16 +422,18 @@ export const ArchitectureVisualization: React.FC<ArchitectureVisualizationProps>
                 </marker>
               </defs>
               <line
-                x1="450"
-                y1="180"
+                x1="500"
+                y1="210"
                 x2="350"
-                y2="180"
+                y2="210"
                 stroke={animationPhase === 'server-to-ui' ? currentLang.color : '#00ff00'}
-                strokeWidth="2"
+                strokeWidth={animationPhase === 'server-to-ui' ? '4' : '2'}
                 markerEnd="url(#arrowhead-left-2)"
-                className={animationPhase === 'server-to-ui' ? 'animate-pulse' : ''}
+                filter={animationPhase === 'server-to-ui' ? 'url(#glow)' : ''}
               />
-              <text x="400" y="200" textAnchor="middle" fill="#00ff00" fontSize="11" fontFamily="monospace">
+              {/* TEXT WITH BACKGROUND */}
+              <rect x="380" y="220" width="95" height="20" fill="#000000" opacity="0.9" />
+              <text x="427" y="235" textAnchor="middle" fill={animationPhase === 'server-to-ui' ? currentLang.color : '#00ff00'} fontSize="11" fontFamily="monospace" fontWeight="bold">
                 JSON Response
               </text>
             </g>
@@ -309,14 +443,14 @@ export const ArchitectureVisualization: React.FC<ArchitectureVisualizationProps>
               <rect
                 x="50"
                 y="300"
-                width="1100"
+                width="1250"
                 height="150"
                 fill="none"
                 stroke="#ffb000"
                 strokeWidth="3"
                 strokeDasharray="10,5"
               />
-              <text x="600" y="330" textAnchor="middle" fill="#ffb000" fontSize="20" fontFamily="monospace" fontWeight="bold">
+              <text x="675" y="330" textAnchor="middle" fill="#ffb000" fontSize="20" fontFamily="monospace" fontWeight="bold">
                 KIRO AUTOMATION LAYER
               </text>
               
@@ -332,23 +466,23 @@ export const ArchitectureVisualization: React.FC<ArchitectureVisualizationProps>
               </g>
 
               <g id="kiro-mcp">
-                <rect x="425" y="350" width="350" height="80" fill="none" stroke="#ffb000" strokeWidth="2" />
-                <text x="600" y="375" textAnchor="middle" fill="#ffb000" fontSize="14" fontFamily="monospace" fontWeight="bold">
+                <rect x="475" y="350" width="350" height="80" fill="none" stroke="#ffb000" strokeWidth="2" />
+                <text x="650" y="375" textAnchor="middle" fill="#ffb000" fontSize="14" fontFamily="monospace" fontWeight="bold">
                   MCP TOOLS
                 </text>
-                <text x="445" y="395" fill="#ffb000" fontSize="11" fontFamily="monospace">• run_legacy_calc (Direct Testing)</text>
-                <text x="445" y="410" fill="#ffb000" fontSize="11" fontFamily="monospace">• summon_ancient_spirit (AI Code Gen)</text>
-                <text x="445" y="425" fill="#ffb000" fontSize="11" fontFamily="monospace">• GPT-4 Integration</text>
+                <text x="495" y="395" fill="#ffb000" fontSize="11" fontFamily="monospace">• run_legacy_calc (Direct Testing)</text>
+                <text x="495" y="410" fill="#ffb000" fontSize="11" fontFamily="monospace">• summon_ancient_spirit (AI Code Gen)</text>
+                <text x="495" y="425" fill="#ffb000" fontSize="11" fontFamily="monospace">• GPT-4 Integration</text>
               </g>
 
               <g id="kiro-steering">
-                <rect x="850" y="350" width="250" height="80" fill="none" stroke="#ffb000" strokeWidth="2" />
-                <text x="975" y="375" textAnchor="middle" fill="#ffb000" fontSize="14" fontFamily="monospace" fontWeight="bold">
+                <rect x="950" y="350" width="250" height="80" fill="none" stroke="#ffb000" strokeWidth="2" />
+                <text x="1075" y="375" textAnchor="middle" fill="#ffb000" fontSize="14" fontFamily="monospace" fontWeight="bold">
                   STEERING
                 </text>
-                <text x="870" y="395" fill="#ffb000" fontSize="11" fontFamily="monospace">• IBM 7090 Persona</text>
-                <text x="870" y="410" fill="#ffb000" fontSize="11" fontFamily="monospace">• Vintage Terminology</text>
-                <text x="870" y="425" fill="#ffb000" fontSize="11" fontFamily="monospace">• Context Injection</text>
+                <text x="970" y="395" fill="#ffb000" fontSize="11" fontFamily="monospace">• IBM 7090 Persona</text>
+                <text x="970" y="410" fill="#ffb000" fontSize="11" fontFamily="monospace">• Vintage Terminology</text>
+                <text x="970" y="425" fill="#ffb000" fontSize="11" fontFamily="monospace">• Context Injection</text>
               </g>
             </g>
 
@@ -357,13 +491,13 @@ export const ArchitectureVisualization: React.FC<ArchitectureVisualizationProps>
               <rect
                 x="50"
                 y="500"
-                width="1100"
+                width="1250"
                 height="250"
                 fill="none"
                 stroke="#00bfff"
                 strokeWidth="3"
               />
-              <text x="600" y="530" textAnchor="middle" fill="#00bfff" fontSize="20" fontFamily="monospace" fontWeight="bold">
+              <text x="675" y="530" textAnchor="middle" fill="#00bfff" fontSize="20" fontFamily="monospace" fontWeight="bold">
                 LEGACY MODERNIZATION TOOLKIT (@necro-bridge/core)
               </text>
               

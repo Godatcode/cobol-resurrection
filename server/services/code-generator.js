@@ -15,31 +15,31 @@ const execAsync = promisify(exec);
 const LANGUAGE_CONFIG = {
   COBOL: {
     extension: '.cbl',
-    directory: 'legacy/cobol',
+    directory: '../legacy/cobol',
     compiler: 'cobc',
-    compileCommand: (filename) => `cobc -x -o legacy/cobol/${filename} legacy/cobol/${filename}.cbl`,
-    templatePath: '.kiro/mcp/prompts/cobol-template.md'
+    compileCommand: (filename) => `cobc -x -o ../legacy/cobol/${filename} ../legacy/cobol/${filename}.cbl`,
+    templatePath: '../.kiro/mcp/prompts/cobol-template.md'
   },
   FORTRAN: {
     extension: '.f',
-    directory: 'legacy/fortran',
+    directory: '../legacy/fortran',
     compiler: 'gfortran',
-    compileCommand: (filename) => `gfortran -o legacy/fortran/${filename} legacy/fortran/${filename}.f`,
-    templatePath: '.kiro/mcp/prompts/fortran-template.md'
+    compileCommand: (filename) => `gfortran -o ../legacy/fortran/${filename} ../legacy/fortran/${filename}.f`,
+    templatePath: '../.kiro/mcp/prompts/fortran-template.md'
   },
   PASCAL: {
     extension: '.pas',
-    directory: 'legacy/pascal',
+    directory: '../legacy/pascal',
     compiler: 'fpc',
-    compileCommand: (filename) => `fpc -olegacy/pascal/${filename} legacy/pascal/${filename}.pas`,
-    templatePath: '.kiro/mcp/prompts/pascal-template.md'
+    compileCommand: (filename) => `fpc -o../legacy/pascal/${filename} ../legacy/pascal/${filename}.pas`,
+    templatePath: '../.kiro/mcp/prompts/pascal-template.md'
   },
   BASIC: {
     extension: '.bas',
-    directory: 'legacy/basic',
+    directory: '../legacy/basic',
     compiler: 'fbc',
-    compileCommand: (filename) => `fbc -o legacy/basic/${filename} legacy/basic/${filename}.bas`,
-    templatePath: '.kiro/mcp/prompts/basic-template.md'
+    compileCommand: (filename) => `fbc -o ../legacy/basic/${filename} ../legacy/basic/${filename}.bas`,
+    templatePath: '../.kiro/mcp/prompts/basic-template.md'
   }
 };
 

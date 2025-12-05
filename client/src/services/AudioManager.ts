@@ -84,7 +84,10 @@ class AudioManager {
     clone.volume = this.settings.volume;
     
     clone.play().catch(error => {
-      console.warn(`Failed to play sound: ${effect}`, error);
+      // Silently fail for empty placeholder files
+      if (error.name !== 'NotSupportedError') {
+        console.warn(`Failed to play sound: ${effect}`, error);
+      }
     });
   }
 

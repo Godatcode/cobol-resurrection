@@ -100,6 +100,17 @@ export const VolumeControl: React.FC = () => {
         <div className="text-xs text-center mt-2 opacity-70">
           {muted ? 'AUDIO: MUTED' : `AUDIO: ${Math.round(volume * 100)}%`}
         </div>
+        
+        {/* Installation Notice */}
+        {showSlider && (
+          <div className="text-xs mt-2 pt-2 border-t border-mainframe-green opacity-50">
+            <div className="mb-1">⚠️ PLACEHOLDER AUDIO</div>
+            <div>Install authentic sounds:</div>
+            <div className="text-[10px] mt-1">
+              /public/sounds/README.md
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

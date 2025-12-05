@@ -25,6 +25,22 @@ function CodeGeneratorModal({ isOpen, onClose, onGenerationComplete }) {
     { value: 'BASIC', label: 'BASIC (1983)', description: 'General purpose' }
   ];
 
+  // Reset state when modal opens or closes
+  React.useEffect(() => {
+    if (isOpen) {
+      // Reset to input step when modal opens
+      setDescription('');
+      setLanguage('COBOL');
+      setFilename('');
+      setGeneratedCode('');
+      setIsGenerating(false);
+      setIsCompiling(false);
+      setCompilationStatus(null);
+      setError('');
+      setStep('input');
+    }
+  }, [isOpen]);
+
   const handleClose = () => {
     // Reset state when closing
     setDescription('');
